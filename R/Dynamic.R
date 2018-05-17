@@ -1,4 +1,3 @@
-rm(list=ls())
 library(dplyr)
 library(reshape2)
 library(GSA)
@@ -8,87 +7,147 @@ library(ggplot2)
 source("normalize.R")
 
 
-dynamic_genes <- function(data, meta, vec_week, vec_group=NULL, vec_gene,meta_week, meta_group=NULL, meta_sample_ID, meta_participant,meta_sex=NULL, meta_age=NULL, indiv) {
+dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
+                  vec_gene,meta_week, meta_group=NULL, meta_sample_ID,
+                  meta_participant,meta_sex=NULL, meta_age=NULL, indiv,
+                  group_facet=FALSE, convert=FALSE) {
+
   pars <- as.list(match.call()[-1])
-  a <- 2
+  browser()
   #Mean individus
   if(indiv == 0) {
     #Put data rownames in the first column of the data frame
     df <- tibble::rownames_to_column(as.data.frame(data), "VALUE")
     colnames(df)[1] <- as.character((pars$meta_sample_ID))
 
-    meta[,c(as.character((pars$meta_sample_ID)))] <- as.character(meta[,c(as.character((pars$meta_sample_ID)))])
+    meta[,c(as.character((pars$meta_sample_ID)))] <-
+      as.character(meta[,c(as.character((pars$meta_sample_ID)))])
     #Merge expression data and meta data
-    merge.data <- merge(meta[,c(as.character((pars$meta_sample_ID)),as.character((pars$meta_participant)),as.character((pars$meta_week)),as.character((pars$meta_group)))],
-          df[,c(1, which(colnames(df) %in% vec_gene))], by=colnames(df)[1])
+    merge_data <- merge(meta[,c(as.character((pars$meta_sample_ID)),
+                  as.character((pars$meta_participant)),
+                  as.character((pars$meta_week)),
+                  as.character((pars$meta_group)))],
+                  df[,c(1, which(colnames(df) %in% vec_gene))],
+                  by=colnames(df)[1])
 
     #Mean of individus
-    mean.indiv.gene <- NULL
+    mean_indiv_gene <- NULL
     for(visit in sort(vec_week)) {
       #If independant groups
-      if(!is.null(meta_group)) {
-        for(group in sort(vec_group)) {
-          if(nrow(merge.data[which(merge.data[,as.character(pars$meta_week)] == visit &
-            merge.data[,as.character(pars$meta_group)] == group),vec_gene]) != 0) mean.indiv.gene <- rbind(mean.indiv.gene,
-              c(round(apply(merge.data[which(merge.data[,as.character(pars$meta_week)] == visit &
-                merge.data[,as.character(pars$meta_group)] == group),vec_gene],2, mean), digits=2), visit, group))
+      if(!is.null(pars$meta_group)) {
+        for(groupi in sort(vec_group)) {
+          if(nrow(merge_data[which(merge_data[,as.character(pars$meta_week)]
+            == visit & merge_data[,as.character(pars$meta_group)] == groupi),
+            vec_gene]) != 0) mean_indiv_gene <- rbind(mean_indiv_gene,
+            c(round(apply(merge_data[which(merge_data[,
+            as.character(pars$meta_week)] == visit &
+            merge_data[,as.character(pars$meta_group)] == groupi),vec_gene],
+            2, mean),
+            digits=2), visit, groupi))
 
         }
       }
       else {
-        if(nrow(merge.data[which(merge.data[,as.character(pars$meta_week)] == visit),vec_gene]) != 0) mean.indiv.gene <- rbind(mean.indiv.gene,
-           c(round(apply(merge.data[which(merge.data[,as.character(pars$meta_week)] == visit),vec_gene],2, mean), digits=2), visit))
+        if(nrow(merge_data[which(merge_data[,as.character(pars$meta_week)] ==
+          visit),vec_gene]) != 0) mean_indiv_gene <- rbind(mean_indiv_gene,
+          c(round(apply(merge_data[which(merge_data[,
+          as.character(pars$meta_week)] == visit),vec_gene],2, mean),
+          digits=2), visit))
       }
 
     }
 
-    mean.indiv.gene <- as.data.frame(mean.indiv.gene)
-    colnames(mean.indiv.gene)[4] <- as.character(pars$meta_week)
-    if(!is.null(meta_group)) colnames(mean.indiv.gene)[5] <- as.character(pars$meta_group)
+    mean_indiv_gene <- as.data.frame(mean_indiv_gene)
+    colnames(mean_indiv_gene)[length(vec_gene)+1] <-
+    as.character(pars$meta_week)
+    if(!is.null(pars$meta_group))
+    colnames(mean_indiv_gene)[length(vec_gene)+2] <-
+      as.character(pars$meta_group)
 
-    mean.indiv.data.plot <- melt(mean.indiv.gene, c(as.character(pars$meta_week),as.character(pars$meta_group)))
+    mean_indiv_data_plot <- melt(mean_indiv_gene, c(as.character(pars$meta_week
+                            ),as.character(pars$meta_group)))
 
     #Convert ProbeID in illumina ID
+    #####TO DO###############
+    #To Change Gene column !!
+    if(convert==TRUE) {
     probes2ill <- as.list(illuminaHumanv4ARRAYADDRESS)
     ill2symb <- as.list(illuminaHumanv4SYMBOL)
     gene_name <- NULL
-    for(i in 1:nrow(mean.indiv.data.plot)) {
-      gene_name <-  c(gene_name,as.character(ill2symb[as.character(names(probes2ill[which(probes2ill %in% mean.indiv.data.plot[i,"variable"])]))]))
+    for(i in 1:nrow(mean_indiv_data_plot)) {
+      gene_name <-  c(gene_name,as.character(ill2symb[as.character(names(
+                    probes2ill[which(probes2ill %in% mean_indiv_data_plot
+                    [i,"variable"])]))]))
     }
-    mean.indiv.data.plot$Gene <- gene_name
+    mean_indiv_data_plot$Gene <- gene_name
+    }
+    #################################
 
     #Normalize
-    mean.indiv.data.plot$Norm <- rep(NA,nrow(mean.indiv.data.plot))
-    for(gene in unique(mean.indiv.data.plot$Gene)) {
-      if(!is.null(meta_group)) {
-        for(group in unique(mean.indiv.data.plot[,as.character((pars$meta_group))])) {
-          index <- which(mean.indiv.data.plot$Gene %in% gene & unique(mean.indiv.data.plot[,as.character((pars$meta_group))]) %in% group)
-          mean.indiv.data.plot[index,]$Norm <- normal_distribution(mean.indiv.data.plot[index,]$value)
+    mean_indiv_data_plot$Norm <- rep(NA,nrow(mean_indiv_data_plot))
+    for(gene in unique(mean_indiv_data_plot$variable)) {
+      if(!is.null(pars$meta_group)) {
+        for(groupi in unique(mean_indiv_data_plot
+          [,as.character((pars$meta_group))])) {
+          index <- which(mean_indiv_data_plot$variable %in% gene &
+                   unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
+                   ) %in% groupi)
+          mean_indiv_data_plot[index,]$Norm <- normal_distribution(
+          mean_indiv_data_plot[index,]$value)
         }
       }
       else {
-        index <- which(mean.indiv.data.plot$Gene %in% gene)
-        mean.indiv.data.plot[index,]$Norm <- normal_distribution(mean.indiv.data.plot[index,]$value)
+        index <- which(mean_indiv_data_plot$variable %in% gene)
+        mean_indiv_data_plot[index,]$Norm <-
+        normal_distribution(mean_indiv_data_plot[index,]$value)
       }
     }
 
-    mean.indiv.data.plot[,as.character(pars$meta_week)] <- as.numeric(as.character(mean.indiv.data.plot[,as.character(pars$meta_week)]))
+    mean_indiv_data_plot[,as.character(pars$meta_week)] <- as.numeric(
+    as.character(mean_indiv_data_plot[,as.character(pars$meta_week)]))
+
     #Plot
-    colnames(mean.indiv.data.plot)[which(colnames(mean.indiv.data.plot) %in% as.character(pars$meta_week))] <- "week"
-    if(!is.null(meta_group)) colnames(mean.indiv.data.plot)[which(colnames(mean.indiv.data.plot) %in% as.character(pars$meta_group))] <- "group"
-    p <- ggplot(data=mean.indiv.data.plot,aes(x=week, y = Norm, colour = Gene), na.rm = TRUE) +
-      geom_point(aes(group=Gene), size=1) +
-      geom_line(aes(group=Gene), linetype='dashed') +
+    colnames(mean_indiv_data_plot)[which(colnames
+    (mean_indiv_data_plot) %in% "variable")] <- "Gene"
+    colnames(mean_indiv_data_plot)[which(colnames
+    (mean_indiv_data_plot) %in% as.character(pars$meta_week))] <- "time"
+    if(!is.null(pars$meta_group)) colnames(mean_indiv_data_plot)[
+    which(colnames(mean_indiv_data_plot) %in% as.character(
+    pars$meta_group))] <- "group"
+
+    if(group_facet == TRUE || is.null(pars$meta_group)) {
+      p <- ggplot(data=mean_indiv_data_plot,
+                  aes(x=time, y = Norm,
+                      colour = Gene),na.rm = TRUE)
+    }
+    if(group_facet == FALSE || !is.null(pars$meta_group)) {
+      p <- ggplot(data=mean_indiv_data_plot,
+                  aes(x=time, y = Norm, colour = group,
+                  group = interaction(group, Gene)),
+                  na.rm = TRUE)
+
+    }
+
+    p <- p + geom_point(size=1) +
+      geom_line(linetype='dashed') +
       ylab(label = "Gene expression")
-      if(!is.null(meta_group)) p <- p + facet_wrap(~ group, ncol = 2)
+
+
+
+    if(!is.null(pars$meta_group)) {
+      if(group_facet == TRUE) p <- p + facet_wrap(~ group, ncol = 2)
+    }
+
     p <- p + ggtitle("Dynamic of gene expression in each arm") +
-      geom_vline(xintercept=unique(mean.indiv.data.plot$week),linetype=4, color="#A8A8A8") +
-      scale_x_continuous(breaks = unique(mean.indiv.data.plot$week)) +
-      theme_bw()
+         geom_vline(xintercept=unique(mean_indiv_data_plot$time),
+         linetype=4, color="#A8A8A8") +
+         scale_x_continuous(breaks =
+         unique(mean_indiv_data_plot$time)) +
+         theme_bw()
 
     print(p)
 
-    return(mean.indiv.data.plot)
+    return(mean_indiv_data_plot)
 
     ##Return plot and data frame
   }
