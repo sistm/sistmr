@@ -13,7 +13,6 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   group_facet=FALSE, convert=FALSE) {
 
   pars <- as.list(match.call()[-1])
-  browser()
   #Mean individus
   if(indiv == 0) {
     #Put data rownames in the first column of the data frame
@@ -120,7 +119,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   aes(x=time, y = Norm,
                       colour = Gene),na.rm = TRUE)
     }
-    if(group_facet == FALSE || !is.null(pars$meta_group)) {
+    if(group_facet == FALSE && !is.null(pars$meta_group)) {
       p <- ggplot(data=mean_indiv_data_plot,
                   aes(x=time, y = Norm, colour = group,
                   group = interaction(group, Gene)),
@@ -138,7 +137,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
       if(group_facet == TRUE) p <- p + facet_wrap(~ group, ncol = 2)
     }
 
-    p <- p + ggtitle("Dynamic of gene expression in each arm") +
+    p <- p + ggtitle("Dynamic of gene expression") +
          geom_vline(xintercept=unique(mean_indiv_data_plot$time),
          linetype=4, color="#A8A8A8") +
          scale_x_continuous(breaks =
