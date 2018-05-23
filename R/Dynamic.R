@@ -10,7 +10,7 @@ source("normalize.R")
 dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   vec_gene,meta_week, meta_group=NULL, meta_sample_ID,
                   meta_participant,meta_sex=NULL, meta_age=NULL, indiv,
-                  group_facet=FALSE, convert=FALSE) {
+                  group_facet=FALSE, convert=FALSE, legend=TRUE) {
 
   pars <- as.list(match.call()[-1])
   #Mean individus
@@ -143,6 +143,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
          scale_x_continuous(breaks =
          unique(mean_indiv_data_plot$time)) +
          theme_bw()
+
+    if(legend == FALSE) p <- p + theme(legend.position="none")
 
     print(p)
 
