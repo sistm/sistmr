@@ -34,7 +34,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   vec_gene,meta_week, meta_group=NULL, norm_group=NULL,
                   meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
                   indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
-                  path_output=NULL) {
+                  path_output=NULL, nameFile=NULL) {
 
   pars <- as.list(match.call()[-1])
 
@@ -190,7 +190,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     } else {
       path <- path_output
     }
-    pdf(file=paste0(path, "/dynamic.pdf"))
+    pdf(file=paste0(path, "/", nameFile, ".pdf"))
     #For each genes
     for(gene in vec_gene) {
       if(!is.null(pars$meta_group)) {
