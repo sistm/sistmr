@@ -7,27 +7,54 @@ library(ggplot2)
 source("normalize.R")
 
 
+#' Genes dynmaic over time
+#'
+#' @param data data
+#' @param meta
+#' @param vec_week
+#' @param vec_group
+#' @param vec_gene
+#' @param meta_week
+#' @param meta_group
+#' @param meta_sample_ID
+#' @param meta_participant
+#' @param meta_sex
+#' @param meta_age
+#' @param indiv
+#' @param group_facet
+#' @param convert
+#' @param legend
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
 dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
-                  vec_gene,meta_week, meta_group=NULL, meta_sample_ID,
-                  meta_participant,meta_sex=NULL, meta_age=NULL, indiv,
-                  group_facet=FALSE, convert=FALSE, legend=TRUE) {
+                  vec_gene,meta_week, meta_group=NULL, norm_group=NULL,
+                  meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
+                  indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
+                  path_output=NULL) {
 
   pars <- as.list(match.call()[-1])
+
+  #Put data rownames in the first column of the data frame
+  df <- tibble::rownames_to_column(as.data.frame(data), "VALUE")
+  colnames(df)[1] <- as.character((pars$meta_sample_ID))
+
+  meta[,c(as.character((pars$meta_sample_ID)))] <-
+    as.character(meta[,c(as.character((pars$meta_sample_ID)))])
+  #Merge expression data and meta data
+  merge_data <- merge(meta[,c(as.character((pars$meta_sample_ID)),
+                              as.character((pars$meta_participant)),
+                              as.character((pars$meta_week)),
+                              as.character((pars$meta_group)))],
+                      df[,c(1, which(colnames(df) %in% vec_gene))],
+                      by=colnames(df)[1])
+
+
   #Mean individus
   if(indiv == 0) {
-    #Put data rownames in the first column of the data frame
-    df <- tibble::rownames_to_column(as.data.frame(data), "VALUE")
-    colnames(df)[1] <- as.character((pars$meta_sample_ID))
-
-    meta[,c(as.character((pars$meta_sample_ID)))] <-
-      as.character(meta[,c(as.character((pars$meta_sample_ID)))])
-    #Merge expression data and meta data
-    merge_data <- merge(meta[,c(as.character((pars$meta_sample_ID)),
-                  as.character((pars$meta_participant)),
-                  as.character((pars$meta_week)),
-                  as.character((pars$meta_group)))],
-                  df[,c(1, which(colnames(df) %in% vec_gene))],
-                  by=colnames(df)[1])
 
     #Mean of individus
     mean_indiv_gene <- NULL
@@ -85,7 +112,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     #Normalize
     mean_indiv_data_plot$Norm <- rep(NA,nrow(mean_indiv_data_plot))
     for(gene in unique(mean_indiv_data_plot$variable)) {
-      if(!is.null(pars$meta_group)) {
+      if(!is.null(pars$meta_group) & !is.null(pars$norm_group)) {
         for(groupi in unique(mean_indiv_data_plot
           [,as.character((pars$meta_group))])) {
           index <- which(mean_indiv_data_plot$variable %in% gene &
@@ -154,8 +181,91 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   }
 
   ##Option with sex and age and group
+
   else {
     ###TO DO
+    #Open pdf
+    if(is.null(path_output)) {
+      path <- getwd()
+    } else {
+      path <- path_output
+    }
+    pdf(file=paste0(path, "/dynamic.pdf"))
+    #For each genes
+    for(gene in vec_gene) {
+      if(!is.null(pars$meta_group)) {
+        data_gene <- cbind(merge_data[,as.character(pars$meta_group)],
+                           as.character(merge_data[,as.character(pars$meta_week)]),
+                           merge_data[,as.character(pars$meta_sample_ID)],
+                           merge_data[,as.character(pars$meta_participant)],
+                           merge_data[,which(colnames(merge_data) %in% gene)])
+
+        colnames(data_gene) <- c("group","time","sample_ID","participant","gene"
+                                 )
+
+        data_gene <- as.data.frame(data_gene)
+        if(!is.null(pars$norm_group)) {
+          #normalize by group
+          data_gene$Norm <- NA
+          for(group in unique(data_gene$group)) {
+            data_gene[which(data_gene$group %in% group),"Norm"] <-
+            normal_distribution(data_gene[which(data_gene$group %in% group),"gene"])
+
+          }
+
+        }
+        else {
+          #Normalize in all groups
+            data_gene[,"Norm"] <-
+              normal_distribution(data_gene[,"gene"])
+
+
+        }
+
+        data_gene$time <- as.numeric(as.character(data_gene$time))
+        #Plot
+        if(group_facet == TRUE || is.null(pars$meta_group)) {
+          p <- ggplot(data=data_gene,
+                      aes(x=time, y = Norm,
+                          colour = participant),na.rm = TRUE)
+        }
+        if(group_facet == FALSE && !is.null(pars$meta_group)) {
+          p <- ggplot(data=mean_indiv_data_plot,
+                      aes(x=time, y = Norm, colour = participant,
+                          group = interaction(group, participant)),
+                      na.rm = TRUE)
+
+        }
+        p <- p + geom_point(size=1) +
+          geom_line(aes(group=participant),linetype='dashed') +
+          ylab(label = "Gene expression")
+
+
+
+        if(!is.null(pars$meta_group)) {
+          if(group_facet == TRUE) p <- p + facet_wrap(~ group, ncol = 2)
+        }
+
+        p <- p + ggtitle(paste0("Dynamic of gene ",gene," expression")) +
+          geom_vline(xintercept=unique(data_gene$time),
+                     linetype=4, color="#A8A8A8") +
+          scale_x_continuous(breaks =
+                               unique(data_gene$time)) +
+          theme_bw()
+
+        if(legend == FALSE) p <- p + theme(legend.position="none")
+
+        print(p)
+
+
+
+      }
+
+      #Get data frame with gene
+
+    }
+    dev.off()
+
     #Return plot and data frame
     print("This part is in construction...")
   }
