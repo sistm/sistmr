@@ -204,7 +204,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                                  )
 
         data_gene <- as.data.frame(data_gene)
-        if(!is.null(pars$norm_group)) {
+        if(!is.null(pars$norm_group) || pars$norm_group == FALSE) {
           #normalize by group
           data_gene$Norm <- NA
           for(group in unique(data_gene$group)) {
