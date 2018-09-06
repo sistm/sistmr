@@ -176,9 +176,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
 
     if(legend == FALSE) p <- p + theme(legend.position="none")
 
-    print(p)
-
-    return(mean_indiv_data_plot)
+    return(list(p,mean_indiv_data_plot))
 
     ##Return plot and data frame
   }
