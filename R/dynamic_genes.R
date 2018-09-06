@@ -4,7 +4,7 @@ library(GSA)
 library(illuminaHumanv4.db)
 library(ggplot2)
 
-source("normalize.R")
+source("R/normalize.R")
 
 
 #' Genes dynmaic over time
@@ -93,9 +93,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     mean_indiv_data_plot <- melt(mean_indiv_gene, c(as.character(pars$meta_week
                             ),as.character(pars$meta_group)))
 
-    #Convert ProbeID in illumina ID
-    #####TO DO###############
-    #To Change Gene column !!
+
     if(convert==TRUE) {
     probes2ill <- as.list(illuminaHumanv4ARRAYADDRESS)
     ill2symb <- as.list(illuminaHumanv4SYMBOL)
@@ -105,7 +103,9 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                     probes2ill[which(probes2ill %in% mean_indiv_data_plot
                     [i,"variable"])]))]))
     }
-    mean_indiv_data_plot$Gene <- gene_name
+    mean_indiv_data_plot <- mean_indiv_data_plot[,
+                                                 !names(mean_indiv_data_plot) %in% "variable"]
+    mean_indiv_data_plot[,"variable"] <- gene_name
     }
     #################################
 
