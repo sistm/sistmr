@@ -4,9 +4,12 @@ library(GSA)
 library(illuminaHumanv4.db)
 library(ggplot2)
 
+<<<<<<< HEAD
 source("R/normalize.R")
 
 
+=======
+>>>>>>> 9a3a1fed74680b259f713c691818897515d7f843
 #' Genes dynmaic over time
 #'
 #' @param data data

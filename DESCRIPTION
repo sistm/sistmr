@@ -2,11 +2,11 @@ Package: sistmr
 Type: Package
 Title: A collection of utility function from the Inserm/Inria SISTM team
 Version: 0.0.1.9000
-Author: Boris Hejblum [aut, cre], Solenne Delahaye [aut]
+Author: Boris Hejblum [aut], Solenne Delahaye [aut, cre]
 Maintainer: Solenne Delahaye <solenne.delahaye@u-bordeaux.fr>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
