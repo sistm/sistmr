@@ -4,12 +4,9 @@ library(GSA)
 library(illuminaHumanv4.db)
 library(ggplot2)
 
-<<<<<<< HEAD
 source("R/normalize.R")
 
 
-=======
->>>>>>> 9a3a1fed74680b259f713c691818897515d7f843
 #' Genes dynmaic over time
 #'
 #' @param data data
@@ -37,10 +34,9 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   vec_gene,meta_week, meta_group=NULL, norm_group=NULL,
                   meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
                   indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
-                  path_output=NULL, nameFile=NULL, title=NULL) {
+                  path_output=NULL, nameFile=NULL, title=NULL,norm="reduce_center") {
 
   pars <- as.list(match.call()[-1])
-
   #Put data rownames in the first column of the data frame
   df <- tibble::rownames_to_column(as.data.frame(data), "VALUE")
   colnames(df)[1] <- as.character((pars$meta_sample_ID))
@@ -85,7 +81,6 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
       }
 
     }
-
     mean_indiv_gene <- as.data.frame(mean_indiv_gene)
     colnames(mean_indiv_gene)[length(vec_gene)+1] <-
     as.character(pars$meta_week)
@@ -111,25 +106,49 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     mean_indiv_data_plot[,"variable"] <- gene_name
     }
     #################################
-
     #Normalize
-    mean_indiv_data_plot$Norm <- rep(NA,nrow(mean_indiv_data_plot))
-    for(gene in unique(mean_indiv_data_plot$variable)) {
-      if(!is.null(pars$meta_group) & !is.null(pars$norm_group)) {
-        for(groupi in unique(mean_indiv_data_plot
-          [,as.character((pars$meta_group))])) {
-          index <- which(mean_indiv_data_plot$variable %in% gene &
-                   unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
-                   ) %in% groupi)
-          mean_indiv_data_plot[index,]$Norm <- normal_distribution(
-          mean_indiv_data_plot[index,]$value)
+
+    if(norm == "reduce_center") {
+      mean_indiv_data_plot$Norm <- rep(NA,nrow(mean_indiv_data_plot))
+      for(gene in unique(mean_indiv_data_plot$variable)) {
+        if(!is.null(pars$meta_group) & !is.null(pars$norm_group)) {
+          for(groupi in unique(mean_indiv_data_plot
+            [,as.character((pars$meta_group))])) {
+            index <- which(mean_indiv_data_plot$variable %in% gene &
+                     unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
+                     ) %in% groupi)
+            mean_indiv_data_plot[index,]$Norm <- normal_distribution(
+            mean_indiv_data_plot[index,]$value)
+          }
+        }
+        else {
+          index <- which(mean_indiv_data_plot$variable %in% gene)
+          mean_indiv_data_plot[index,]$Norm <-
+          normal_distribution(mean_indiv_data_plot[index,]$value)
         }
       }
-      else {
-        index <- which(mean_indiv_data_plot$variable %in% gene)
-        mean_indiv_data_plot[index,]$Norm <-
-        normal_distribution(mean_indiv_data_plot[index,]$value)
+    }
+
+    if(norm=="around_zero") {
+      mean_indiv_data_plot$Norm <- rep(NA,nrow(mean_indiv_data_plot))
+      for(gene in unique(mean_indiv_data_plot$variable)) {
+        if(!is.null(pars$meta_group)) {
+          for(groupi in unique(mean_indiv_data_plot
+                               [,as.character((pars$meta_group))])) {
+            index <- which(mean_indiv_data_plot$variable %in% gene &
+                             unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
+                             ) %in% groupi)
+            mean_indiv_data_plot[index,]$Norm <- normal_zero(
+              mean_indiv_data_plot[index,]$value)
+          }
+        }
+        else {
+          index <- which(mean_indiv_data_plot$variable %in% gene)
+          mean_indiv_data_plot[index,]$Norm <-
+            normal_zero(mean_indiv_data_plot[index,]$value)
+        }
       }
+
     }
 
     mean_indiv_data_plot[,as.character(pars$meta_week)] <- as.numeric(
