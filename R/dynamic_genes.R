@@ -227,17 +227,33 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
         if(!is.null(pars$norm_group)) {
           #normalize by group
           data_gene$Norm <- NA
-          for(group in unique(data_gene$group)) {
-            data_gene[which(data_gene$group %in% group),"Norm"] <-
-            normal_distribution(data_gene[which(data_gene$group %in% group),"gene"])
+          if(norm=="reduce_center") {
+            for(group in unique(data_gene$group)) {
+              data_gene[which(data_gene$group %in% group),"Norm"] <-
+              normal_distribution(data_gene[which(data_gene$group %in% group),"gene"])
 
+            }
+          }
+          else {
+            for(group in unique(data_gene$group)) {
+              data_gene[which(data_gene$group %in% group),"Norm"] <-
+                normal_zero(data_gene[which(data_gene$group %in% group),"gene"])
+
+            }
           }
 
         }
         else {
+          if(norm=="reduce_center") {
           #Normalize in all groups
             data_gene[,"Norm"] <-
               normal_distribution(data_gene[,"gene"])
+          }
+          else {
+            #Normalize in all groups
+            data_gene[,"Norm"] <-
+              normal_zero(data_gene[,"gene"])
+          }
 
 
         }
