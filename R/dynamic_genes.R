@@ -115,8 +115,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
           for(groupi in unique(mean_indiv_data_plot
             [,as.character((pars$meta_group))])) {
             index <- which(mean_indiv_data_plot$variable %in% gene &
-                     unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
-                     ) %in% groupi)
+                     mean_indiv_data_plot[,as.character((pars$meta_group))]
+                      %in% groupi)
             mean_indiv_data_plot[index,]$Norm <- normal_distribution(
             mean_indiv_data_plot[index,]$value)
           }
@@ -136,8 +136,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
           for(groupi in unique(mean_indiv_data_plot
                                [,as.character((pars$meta_group))])) {
             index <- which(mean_indiv_data_plot$variable %in% gene &
-                             unique(mean_indiv_data_plot[,as.character((pars$meta_group))]
-                             ) %in% groupi)
+                             mean_indiv_data_plot[,as.character((pars$meta_group))]
+                              %in% groupi)
             mean_indiv_data_plot[index,]$Norm <- normal_zero(
               mean_indiv_data_plot[index,]$value)
           }
