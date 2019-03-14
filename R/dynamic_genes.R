@@ -202,6 +202,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   else {
     ###TO DO
     #Open pdf
+    browser()
     list_p <- list()
     if(is.null(path_output)) {
       path <- getwd()
