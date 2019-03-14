@@ -1,7 +1,4 @@
-library(dplyr)
-library(reshape2)
-library(GSA)
-library(illuminaHumanv4.db)
+﻿library(illuminaHumanv4.db)
 library(ggplot2)
 
 source("R/normalize.R")
@@ -205,68 +202,65 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   else {
     ###TO DO
     #Open pdf
+    browser()
     if(is.null(path_output)) {
       path <- getwd()
     } else {
       path <- path_output
     }
-    pdf(file=paste0(path, "/", nameFile, ".pdf"))
+    #pdf(file=paste0(path, "/", nameFile, ".pdf"))
     #For each genes
     for(gene in vec_gene) {
       if(!is.null(pars$meta_group)) {
-        data_gene <- cbind(merge_data[,as.character(pars$meta_group)],
+        data_gene <- cbind(as.character(merge_data[,as.character(pars$meta_group)]),
                            as.character(merge_data[,as.character(pars$meta_week)]),
                            merge_data[,as.character(pars$meta_sample_ID)],
-                           merge_data[,as.character(pars$meta_participant)],
-                           merge_data[,which(colnames(merge_data) %in% gene)])
+                           as.character(merge_data[,as.character(pars$meta_participant)]),
+                           round(merge_data[,which(colnames(merge_data) %in% gene)],2))
 
         colnames(data_gene) <- c("group","time","sample_ID","participant","gene"
                                  )
-
         data_gene <- as.data.frame(data_gene)
-        if(!is.null(pars$norm_group)) {
-          #normalize by group
-          data_gene$Norm <- NA
-          if(norm=="reduce_center") {
-            for(group in unique(data_gene$group)) {
-              data_gene[which(data_gene$group %in% group),"Norm"] <-
-              normal_distribution(data_gene[which(data_gene$group %in% group),"gene"])
+        #normalize by group
+        data_gene$Norm <- NA
+        if(norm=="reduce_center") {
+          for(ind in unique(data_gene$participant)) {
+            data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+            normal_distribution(data_gene[which(data_gene$participant %in% ind),"gene"])
 
-            }
           }
-          else {
-            for(group in unique(data_gene$group)) {
-              data_gene[which(data_gene$group %in% group),"Norm"] <-
-                normal_zero(data_gene[which(data_gene$group %in% group),"gene"])
-
-            }
-          }
-
         }
         else {
-          if(norm=="reduce_center") {
-          #Normalize in all groups
-            data_gene[,"Norm"] <-
-              normal_distribution(data_gene[,"gene"])
+          for(ind in unique(data_gene$participant)) {
+            data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+            normal_zero(data_gene[which(data_gene$participant %in% ind),"gene"])
           }
-          else {
-            #Normalize in all groups
-            data_gene[,"Norm"] <-
-              normal_zero(data_gene[,"gene"])
-          }
-
-
         }
 
-        data_gene$time <- as.numeric(as.character(data_gene$time))
-        #Plot
+      }
+      else {
+        if(norm=="reduce_center") {
+          #Normalize in all groups
+          data_gene[,"Norm"] <-
+          normal_distribution(data_gene[,"gene"])
+        }
+        else {
+          #Normalize in all groups
+          data_gene[,"Norm"] <-
+          normal_zero(data_gene[,"gene"])
+        }
+
+      }
+
+      data_gene$time <- as.numeric(as.character(data_gene$time))
+        ##♣Plot
         if(group_facet == TRUE || is.null(pars$meta_group)) {
           p <- ggplot(data=data_gene,
                       aes(x=time, y = Norm,
                           colour = participant),na.rm = TRUE)
         }
         if(group_facet == FALSE && !is.null(pars$meta_group)) {
-          p <- ggplot(data=mean_indiv_data_plot,
+          p <- ggplot(data=data_gene,
                       aes(x=time, y = Norm, colour = participant,
                           group = interaction(group, participant)),
                       na.rm = TRUE)
@@ -281,7 +275,6 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
         if(!is.null(pars$meta_group)) {
           if(group_facet == TRUE) p <- p + facet_wrap(~ group, ncol = 2)
         }
-
         p <- p + ggtitle(paste0("Dynamic of gene ",gene," expression")) +
           geom_vline(xintercept=unique(data_gene$time),
                      linetype=4, color="#A8A8A8") +
@@ -300,8 +293,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
       #Get data frame with gene
 
     }
-    dev.off()
-
+    #dev.off()
+    return(data_gene)
     #Return plot and data frame
     print("This part is in construction...")
   }
