@@ -1,4 +1,4 @@
-﻿library(illuminaHumanv4.db)
+library(illuminaHumanv4.db)
 library(ggplot2)
 
 source("R/normalize.R")
@@ -300,4 +300,4 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   }
 
 
-}
+
