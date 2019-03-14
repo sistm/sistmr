@@ -202,7 +202,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   else {
     ###TO DO
     #Open pdf
-    list_p <- list(length(vec_gene))
+    list_p <- list()
     if(is.null(path_output)) {
       path <- getwd()
     } else {
