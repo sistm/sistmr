@@ -202,7 +202,6 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
   else {
     ###TO DO
     #Open pdf
-    browser()
     list_p <- list()
     if(is.null(path_output)) {
       path <- getwd()
@@ -211,7 +210,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     }
     #pdf(file=paste0(path, "/", nameFile, ".pdf"))
     #For each genes
-    i <- 0
+    i <- 1
     for(gene in vec_gene) {
       if(!is.null(pars$meta_group)) {
         data_gene <- cbind(as.character(merge_data[,as.character(pars$meta_group)]),
@@ -286,7 +285,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
 
         if(legend == FALSE) p <- p + theme(legend.position="none")
 
-        list_p[[i]] <<- p
+        list_p[[i]] <- p
         i <- i + 1
 
 
