@@ -32,7 +32,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
                   indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
                   path_output=NULL, nameFile=NULL, title=NULL,norm="reduce_center",
-                  indiv_col=TRUE, group_col=FALSE) {
+                  indiv_col=TRUE, group_col=FALSE, norm_ind=FALSE) {
 
   pars <- as.list(match.call()[-1])
   #Put data rownames in the first column of the data frame
@@ -213,7 +213,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     #For each genes
     i <- 1
     for(gene in vec_gene) {
-      if(!is.null(pars$meta_group)) {
+
         data_gene <- cbind(as.character(merge_data[,as.character(pars$meta_group)]),
                            as.character(merge_data[,as.character(pars$meta_week)]),
                            merge_data[,as.character(pars$meta_sample_ID)],
@@ -223,36 +223,93 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
         colnames(data_gene) <- c("group","time","sample_ID","participant","gene"
                                  )
         data_gene <- as.data.frame(data_gene)
-        #normalize by group
         data_gene$Norm <- NA
-        if(norm=="reduce_center") {
-          for(ind in unique(data_gene$participant)) {
-            data_gene[which(data_gene$participant %in% ind),"Norm"] <-
-            normal_distribution(data_gene[which(data_gene$participant %in% ind),"gene"])
 
+
+        ##NORMALISATION
+        if(!is.null(pars$meta_group) && norm_ind == TRUE) {
+          if(norm_group == TRUE) {
+            for(gr in unique(data_gene$group)) {
+              for(ind in unique(data_gene$participant)) {
+                if(norm=="reduce_center") {
+                  data_gene[which(data_gene$participant %in% ind & data_gene$group %in% gr),"Norm"] <-
+                  normal_distribution(data_gene[which(data_gene$participant %in% ind & data_gene$group %in% gr),"gene"])
+                }
+                if(norm=="around_zero") {
+                    data_gene[which(data_gene$participant %in% ind & data_gene$group %in% gr),"Norm"] <-
+                    normal_zero(data_gene[which(data_gene$participant %in% ind & data_gene$group %in% gr),"gene"])
+                }
+
+              }
+            }
+          }
+          if(norm_group == FALSE) {
+            for(ind in unique(data_gene$participant)) {
+              if(norm=="reduce_center") {
+                data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+                normal_distribution(data_gene[which(data_gene$participant %in% ind),"gene"])
+              }
+              if(norm=="around_zero") {
+                data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+                normal_zero(data_gene[which(data_gene$participant %in% ind),"gene"])
+              }
+            }
           }
         }
-        else {
-          for(ind in unique(data_gene$participant)) {
-            data_gene[which(data_gene$participant %in% ind),"Norm"] <-
-            normal_zero(data_gene[which(data_gene$participant %in% ind),"gene"])
+
+        if(!is.null(pars$meta_group) && norm_ind == FALSE) {
+          if(norm_group == TRUE) {
+            for(gr in unique(data_gene$group)) {
+                if(norm=="reduce_center") {
+                  data_gene[which(data_gene$group %in% gr),"Norm"] <-
+                    normal_distribution(data_gene[which(data_gene$group %in% gr),"gene"])
+                }
+                if(norm=="around_zero") {
+                  data_gene[which(data_gene$group %in% gr),"Norm"] <-
+                    normal_zero(data_gene[which(data_gene$group %in% gr),"gene"])
+                }
+
+            }
+          }
+          if(norm_group == FALSE) {
+            for(ind in unique(data_gene$participant)) {
+              if(norm=="reduce_center") {
+                data_gene[,"Norm"] <-
+                  normal_distribution(data_gene[,"gene"])
+              }
+              if(norm=="around_zero") {
+                data_gene[,"Norm"] <-
+                  normal_zero(data_gene[,"gene"])
+              }
+            }
           }
         }
 
-      }
-      else {
-        if(norm=="reduce_center") {
-          #Normalize in all groups
-          data_gene[,"Norm"] <-
-          normal_distribution(data_gene[,"gene"])
-        }
-        else {
-          #Normalize in all groups
-          data_gene[,"Norm"] <-
-          normal_zero(data_gene[,"gene"])
+        if(is.null(pars$meta_group) && norm_ind == TRUE) {
+          for(ind in unique(data_gene$participant)) {
+            if(norm=="reduce_center") {
+              data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+                normal_distribution(data_gene[which(data_gene$participant %in% ind),"gene"])
+            }
+            if(norm=="around_zero") {
+              data_gene[which(data_gene$participant %in% ind),"Norm"] <-
+                normal_zero(data_gene[which(data_gene$participant %in% ind),"gene"])
+            }
+          }
         }
 
-      }
+        if(is.null(pars$meta_group) && norm_ind == FALSE) {
+            if(norm=="reduce_center") {
+              data_gene[,"Norm"] <-
+                normal_distribution(data_gene[,"gene"])
+            }
+            if(norm=="around_zero") {
+              data_gene[,"Norm"] <-
+                normal_zero(data_gene[,"gene"])
+            }
+        }
+
+
 
       data_gene$time <- as.numeric(as.character(data_gene$time))
         ##♣Plot
