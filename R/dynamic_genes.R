@@ -31,7 +31,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   vec_gene,meta_week, meta_group=NULL, norm_group=NULL,
                   meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
                   indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
-                  path_output=NULL, nameFile=NULL, title=NULL,norm="reduce_center") {
+                  path_output=NULL, nameFile=NULL, title=NULL,norm="reduce_center",
+                  indiv_col=TRUE, group_col=FALSE) {
 
   pars <- as.list(match.call()[-1])
   #Put data rownames in the first column of the data frame
@@ -260,6 +261,11 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                       aes(x=time, y = Norm,
                           colour = participant),na.rm = TRUE)
         }
+        if(group_facet == TRUE || is.null(pars$meta_group) && group_col == TRUE) {
+          p <- ggplot(data=data_gene,
+                    aes(x=time, y = Norm,
+                        colour = group),na.rm = TRUE)
+        }
         if(group_facet == FALSE && !is.null(pars$meta_group)) {
           p <- ggplot(data=data_gene,
                       aes(x=time, y = Norm, colour = participant,
@@ -267,6 +273,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                       na.rm = TRUE)
 
         }
+
         p <- p + geom_point(size=1) +
           geom_line(aes(group=participant),linetype='dashed') +
           ylab(label = "Gene expression")
