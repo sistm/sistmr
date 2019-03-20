@@ -32,7 +32,8 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
                   meta_sample_ID,meta_participant,meta_sex=NULL, meta_age=NULL,
                   indiv,group_facet=FALSE, convert=FALSE, legend=TRUE,
                   path_output=NULL, nameFile=NULL, title=NULL,norm="reduce_center",
-                  indiv_col=TRUE, group_col=FALSE, norm_ind=FALSE) {
+                  indiv_col=TRUE, group_col=FALSE, norm_ind=FALSE,indiv_return_plot=1,
+                  indiv_return_data=0) {
 
   pars <- as.list(match.call()[-1])
   #Put data rownames in the first column of the data frame
@@ -204,6 +205,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
     ###TO DO
     #Open pdf
     list_p <- list()
+    list_data <- list()
     if(is.null(path_output)) {
       path <- getwd()
     } else {
@@ -350,12 +352,14 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
         if(legend == FALSE) p <- p + theme(legend.position="none")
 
         list_p[[i]] <- p
+        list_data[[i]] <- data_genes
         i <- i + 1
 
 
      }
 
-      return(list_p)
+      if(indiv_return_plot == 1) return(list_p)
+      if(indiv_return_data == 1) return(list_data)
 
   }
 }
