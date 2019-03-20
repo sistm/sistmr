@@ -352,7 +352,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
         if(legend == FALSE) p <- p + theme(legend.position="none")
 
         list_p[[i]] <- p
-        list_data[[i]] <- data_genes
+        list_data[[i]] <- data_gene
         i <- i + 1
 
 
