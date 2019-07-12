@@ -353,6 +353,7 @@ dynamic_genes <- function(data, meta, vec_week, vec_group=NULL,
 
         list_p[[i]] <- p
         list_data[[i]] <- data_gene
+        names(list_data[[i]]) <- gene
         i <- i + 1
 
 
