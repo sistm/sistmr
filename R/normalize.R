@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param vec 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 normal_distribution <- function(vec) {
   vec <- as.numeric(vec)
   vec[is.na(vec)] <- mean(vec[!is.na(vec)])

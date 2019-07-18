@@ -8,7 +8,9 @@ dynamic_genes(data, meta, vec_week, vec_group = NULL, vec_gene,
   meta_week, meta_group = NULL, norm_group = NULL, meta_sample_ID,
   meta_participant, meta_sex = NULL, meta_age = NULL, indiv,
   group_facet = FALSE, convert = FALSE, legend = TRUE,
-  path_output = NULL, nameFile = NULL, title = NULL)
+  path_output = NULL, nameFile = NULL, title = NULL,
+  norm = "reduce_center", indiv_col = TRUE, group_col = FALSE,
+  norm_ind = FALSE, indiv_return_plot = 1, indiv_return_data = 0)
 }
 \arguments{
 \item{data}{data}

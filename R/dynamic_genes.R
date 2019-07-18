@@ -1,9 +1,3 @@
-library(illuminaHumanv4.db)
-library(ggplot2)
-
-source("R/normalize.R")
-
-
 #' Genes dynmaic over time
 #'
 #' @param data data
@@ -23,6 +17,8 @@ source("R/normalize.R")
 #' @param legend
 #'
 #' @return
+#' @import ggplot2
+#' @import illuminaHumanv4.db
 #' @export
 #'
 #' @examples
