@@ -1,15 +1,14 @@
 ---
-title: "sistmr : Mode d'emploi"
-author: "Equipe SISTM"
-date: "`r format(Sys.time(), '%d/%m/%Y')`"
-output: 
-  html_document: 
-    keep_md: yes
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# sistmr
+
+[![Travis build status](https://travis-ci.org/sistm/sistmr.svg?branch=master)](https://travis-ci.org/sistm/sistmr)
 
 `sistmr` est un package R, hébergé sur Github, contenant des fonctions
 communes aux membres de l'équipe [SISTM](bph.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/).
