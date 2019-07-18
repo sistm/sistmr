@@ -18,7 +18,6 @@
 #'
 #' @return
 #' @import ggplot2
-#' @import illuminaHumanv4.db
 #' @export
 #'
 #' @examples

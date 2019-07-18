@@ -3,4 +3,3 @@
 export(dynamic_genes)
 export(normal_distribution)
 import(ggplot2)
-import(illuminaHumanv4.db)
