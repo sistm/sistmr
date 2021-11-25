@@ -3,5 +3,8 @@
 export(dynamic_genes)
 export(multipleBoxplots)
 export(normal_distribution)
+export(volcanoPlot)
+import(dplyr)
 import(ggbeeswarm)
 import(ggplot2)
+import(ggrepel)
