@@ -33,7 +33,6 @@ points outside the confidence interval for the upper and lower limits. Default i
 Bland-Altman plot function
 }
 \examples{
-
 BA_data <- read.table("C:/Users/mh8/Downloads/BA_data.txt")
 y <- BA_data[, c(3:11)]
 x <- BA_data[, c(12:20)]

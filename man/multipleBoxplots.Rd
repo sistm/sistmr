@@ -4,22 +4,22 @@
 \alias{multipleBoxplots}
 \title{Multiple boxplots for many times}
 \usage{
-multipleBoxplots(abs, ord, data, color_palette = "Dark2", color_manual = FALSE)
+multipleBoxplots(data, x_var, y_var)
 }
 \arguments{
-\item{abs}{corresponding to the x coordinates for the plot.}
+\item{data}{a dataset from which the variable \code{x_var} and \code{y_var} should be taken.}
 
-\item{ord}{corresponding to the y coordinates for the plot.}
+\item{x_var}{corresponding to the x coordinates for the plot.}
 
-\item{data}{Dataset to use for plot.}
-
-\item{color_palette}{a color palette for boxplot.}
-
-\item{color_manual}{a color vector where each color is for one boxplot.}
+\item{y_var}{corresponding to the y coordinates for the plot.}
 }
 \value{
 
 }
 \description{
 Multiple boxplots for many times
+}
+\examples{
+data <- read.table("C:/Users/mh8/Downloads/data_pkg.txt")
+multipleBoxplots( data = data, x_var = time, y_var = TNFRSF9)
 }

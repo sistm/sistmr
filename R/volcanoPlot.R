@@ -19,14 +19,6 @@
 #' @import rlang
 #' @export
 #'
-#' @examples
-#' 
-
-# FDR_threshold = 0.05
-# lfc_threshold = log2(1.5)
-
-# data_pkgVP <- read.csv("C:/Users/mh8/Downloads/data_res_VP.csv")
-# volcanoPlot(log2fc = log2FC_J7vsJ0 , pValue = adjusted_pvalues, data=data_pkgVP, FDR_threshold = 0.05, LFC_threshold = log2(1.5), geneNames = X)
 
 volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshold = log2(1.5), 
                         color = c("red", "black"), geneNames = NULL, nb_geneTags = 20, logTransformPVal = TRUE){
@@ -38,7 +30,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   geneNames_var <- enquo(geneNames)
   
   
-  #To obtain the value vector of log2fc
+  #To obtain the value vector of this following variables which are in 'data'
   log2fc_val <- eval_tidy(log2fc_var, data)
   pValue_val <- eval_tidy(pValue_var, data)
   geneNames_val <- eval_tidy(geneNames_var, data)
@@ -51,8 +43,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   # test if pval is between 0 and 1
   if (any(pValue_val < 0 | pValue_val > 1))
     stop("'pValue' should be >= 0 and <= 1") # prevent from being already on log scale
-
-
+  
   #To add a significant variable in data for differentiate genes which are significant or not on the plot
   data$significant <- "Significant"
   data$significant[pValue_val > FDR_threshold | abs(log2fc_val) < LFC_threshold] <- "Not significant"
@@ -72,13 +63,15 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
           #To put the coordinates of the abscissa in log2
           scale_x_continuous(breaks=log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)), 
                              minor_breaks = NULL,
-                             limits = c(-7,7), labels = c("log2(1/50)", "log2(1/15)", "log2(1/5)", "log2(1/1.5)", "log2(1.5)", "log2(5)", "log2(15)", "log2(50)")) + #round(log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)),2)) 
-          #To put the chosen color
-          scale_color_manual(values = color) +
-          scale_fill_manual(values = color) +      
+                             limits = c(-7,7), labels = c("1/50", "1/15", "1/5", "1/1.5", "1.5", "5", "15", "50")) + #round(log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)),2)) 
+    # limits = c(-7,7), labels = c("log2(1/50)", "log2(1/15)", "log2(1/5)", "log2(1/1.5)", "log2(1.5)", "log2(5)", "log2(15)", "log2(50)")) + #round(log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)),2)) 
+          #To put the log2 scale in the x-axis label
+          xlab(paste0(as_name(log2fc_var), " (log2 scale)")) +
+          #To put the chosen color and name = "" to remove the title of legend
+          scale_color_manual(values = color, name = "") +
+          scale_fill_manual(values = color, name = "") +   
           #To change background plot
           theme_bw()
-  
   
   #To obtain the "nb_geneTags" first significant genes and put tags on plot
   if(!is.null(geneNames_val)){
@@ -104,8 +97,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
                              min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = 20) 
   }
   
-  
-  if(logTransformPVal == TRUE){
+  if(logTransformPVal){
     
     #To transform p-values into -log10
     trans_mlog10 <- scales::trans_new(name = "-log10",
@@ -121,7 +113,6 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
                                labels = c(expression("1x10"^{0}), expression("5x10"^{-1}), expression("1x10"^{-1}), 
                                           expression("5x10"^{-2}), expression("1x10"^{-2}), expression("5x10"^{-3}),
                                           expression("1x10"^{-3}), expression("5x10"^{-4}))) 
-            
   } else {
     plot <- plot +
             ylab("FDR p-value") 

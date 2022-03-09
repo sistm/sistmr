@@ -9,6 +9,9 @@ normal_distribution(vec)
 \arguments{
 \item{vec}{}
 }
+\value{
+
+}
 \description{
 Title
 }

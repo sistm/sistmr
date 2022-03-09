@@ -32,9 +32,10 @@ variable \code{log2fc}, \code{pValue} and \code{geneNames} (if it is used) shoul
 
 \item{geneNames}{a vector of gene names if you want to put gene tags on the volcano plot. Default is NULL.}
 
-\item{nb_geneTags}{number of tags for the significant genes if \code{geneNames} is not NULL.}
+\item{nb_geneTags}{number of tags for the significant genes if \code{geneNames} 
+is not NULL. Default is 20 to obtain the 20 first significant genes.}
 
-\item{logTransformPVal}{If TRUE, the p-values will have a negative logarithm transformation (base 10).}
+\item{logTransformPVal}{If TRUE, the p-values will have a negative logarithm transformation (base 10). Default is TRUE.}
 }
 \value{
 
@@ -43,5 +44,6 @@ variable \code{log2fc}, \code{pValue} and \code{geneNames} (if it is used) shoul
 Volcano plot function
 }
 \examples{
-
+data_pkgVP <- read.csv("C:/Users/mh8/Downloads/data_res_VP.csv")
+volcanoPlot(log2fc = log2FC_J7vsJ0 , pValue = adjusted_pvalues, data=data_pkgVP, geneNames = X)
 }

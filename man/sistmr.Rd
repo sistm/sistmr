@@ -3,8 +3,4 @@
 \docType{package}
 \name{sistmr}
 \alias{sistmr}
-\alias{sistmr-package}
 \title{sistmr.}
-\description{
-sistmr.
-}
