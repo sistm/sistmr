@@ -1,8 +1,10 @@
 
 # sistmr
 
-[![Travis build
-status](https://travis-ci.org/sistm/sistmr.svg?branch=master)](https://travis-ci.org/sistm/sistmr)
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
+<!-- badges: end -->
 
 `sistmr` est un package R, hébergé sur Github, contenant des fonctions
 communes aux membres de l’équipe
@@ -21,14 +23,15 @@ version de ces codes.
 
 Pour pouvoir contribuer, il faut:
 
-  - se créer un compte sur [Github](https://github.com/)
+-   se créer un compte sur [Github](https://github.com/)
 
-  - demander de faire partie de l’“organisation” SISTM :
+-   demander de faire partie de l’“organisation” SISTM :
     <https://github.com/sistm>
 
-  - cloner le dépôt git <https://github.com/sistm/sistmr> (par exemple,
-    depuis Rstudio : New project \> Version control \> Git, renseigner
-    l’adresse du dépôt dans “Repository URL” puis “Create project”).
+-   cloner le dépôt git <https://github.com/sistm/sistmr> (par exemple,
+    depuis Rstudio : New project &gt; Version control &gt; Git,
+    renseigner l’adresse du dépôt dans “Repository URL” puis “Create
+    project”).
 
 Pour plus d’informations sur l’utilisation de Git et Github, voir le
 chapitre 2 de
@@ -40,14 +43,14 @@ Une fois l’accès configuré, l’essentiel des contributions se passe dans
 le dossier `R/`. La marche à suivre et les recommandations sont les
 suivantes :
 
-  - LA REGLE : une fonction = un fichier `*.R` \!\!\!
+-   LA REGLE : une fonction = un fichier `*.R` !!!
 
-  - ajouter un fichier R contenant le code R de la fonction
+-   ajouter un fichier R contenant le code R de la fonction
 
-  - documenter la fonction à l’aide des tags `roxygen` (pour plus de
+-   documenter la fonction à l’aide des tags `roxygen` (pour plus de
     détails sur la documentation `roxygen`, voir la section 1.3 de
     [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)),
-    puis générer la documentation (Rstudio: onglet Build \> More \>
+    puis générer la documentation (Rstudio: onglet Build &gt; More &gt;
     Document, ou exécuter `devtools::document()`)
 
 ## Prise en compte des modifs et synchronisation
@@ -55,8 +58,8 @@ suivantes :
 Le travail est fait en local, il faut maintenant le synchroniser avec le
 serveur :
 
-  - faire un “commit”, en explicitant au maximum ce que vous avez fait
+-   faire un “commit”, en explicitant au maximum ce que vous avez fait
 
-  - faire un “push” pour uploader vos modifications vers github.
+-   faire un “push” pour uploader vos modifications vers github.
 
 Merci de votre contribution à `sistmr` :-)

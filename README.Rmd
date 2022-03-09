@@ -8,8 +8,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # sistmr
 
-[![Travis build status](https://travis-ci.org/sistm/sistmr.svg?branch=master)](https://travis-ci.org/sistm/sistmr)
-
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
+<!-- badges: end -->
+ 
 `sistmr` est un package R, hébergé sur Github, contenant des fonctions
 communes aux membres de l'équipe [SISTM](bph.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/).
 
