@@ -32,12 +32,3 @@ a \code{ggplot2} object
 \description{
 Bland-Altman plot function
 }
-\examples{
-BA_data <- read.table("C:/Users/mh8/Downloads/BA_data.txt")
-y <- BA_data[, c(3:11)]
-x <- BA_data[, c(12:20)]
-
-y <- do.call("c",y)
-x <- do.call("c",x)
-sistmr::BlandAltmanPlot(var1 = x, var2 = y)
-}

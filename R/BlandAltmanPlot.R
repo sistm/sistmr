@@ -13,15 +13,7 @@
 #' @import BlandAltmanLeh
 #' @import ggplot2
 #' @export
-#'
-#' @examples
-#' BA_data <- read.table("C:/Users/mh8/Downloads/BA_data.txt")
-#' y <- BA_data[, c(3:11)]
-#' x <- BA_data[, c(12:20)]
-#' 
-#' y <- do.call("c",y)
-#' x <- do.call("c",x)
-#' sistmr::BlandAltmanPlot(var1 = x, var2 = y)
+
 
 BlandAltmanPlot <- function(var1, var2, with_gradient = FALSE, line_color = c("blue", "lightblue"), extremum_pctg = TRUE){
 
