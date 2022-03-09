@@ -12,13 +12,13 @@
 #' is not NULL. Default is 20 to obtain the 20 first significant genes.
 #' @param logTransformPVal If TRUE, the p-values will have a negative logarithm transformation (base 10). Default is TRUE.
 #'
-#' @return
+#' @return a \code{ggplot2} object 
 #' @import dplyr
 #' @import ggplot2
 #' @import ggrepel
 #' @import rlang
+#' @importFrom scales trans_new
 #' @export
-#'
 
 volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshold = log2(1.5), 
                         color = c("red", "black"), geneNames = NULL, nb_geneTags = 20, logTransformPVal = TRUE){
@@ -52,10 +52,9 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
                              ordered= TRUE)
   
   # Initial plot
-  plot <- ggplot(data) +
+  plot <- ggplot(data = data, aes(x = !!log2fc_var, y = !!pValue_var)) +
           #To add points
-          geom_point(data = data, aes(x = !!log2fc_var, y = !!pValue_var, 
-                      color = significant, fill = significant), alpha = 0.5) +
+          geom_point(data = data, aes_string(color = "significant", fill = "significant"), alpha = 0.5) +
           #To add vertical and horizontal threshold lines
           geom_vline(xintercept = LFC_threshold, lty = 2, colour="black") +
           geom_vline(xintercept = -LFC_threshold, lty = 2, colour="black") +
@@ -63,8 +62,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
           #To put the coordinates of the abscissa in log2
           scale_x_continuous(breaks=log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)), 
                              minor_breaks = NULL,
-                             limits = c(-7,7), labels = c("1/50", "1/15", "1/5", "1/1.5", "1.5", "5", "15", "50")) + #round(log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)),2)) 
-    # limits = c(-7,7), labels = c("log2(1/50)", "log2(1/15)", "log2(1/5)", "log2(1/1.5)", "log2(1.5)", "log2(5)", "log2(15)", "log2(50)")) + #round(log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)),2)) 
+                             limits = c(-7,7), labels = c("1/50", "1/15", "1/5", "1/1.5", "1.5", "5", "15", "50")) + 
           #To put the log2 scale in the x-axis label
           xlab(paste0(as_name(log2fc_var), " (log2 scale)")) +
           #To put the chosen color and name = "" to remove the title of legend
@@ -75,6 +73,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   
   #To obtain the "nb_geneTags" first significant genes and put tags on plot
   if(!is.null(geneNames_val)){
+    # browser()
     #To obtain the "nb_geneTags" first significant genes 
     geneTags <- data
     geneTags <- geneTags[which(pValue_val < FDR_threshold),]
@@ -84,15 +83,17 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
     geneNames_gT <- rlang::eval_tidy(geneNames_var, geneTags)
     
     #To add a tags for the significant gene on plot
-    data$Tags <- "No"
+    data[, "Tags"] <- "No"
     data[which(geneNames_val %in% geneNames_gT), "Tags"] <- "Yes"
+    
+    dataToPlot_Tags <- data[which(data$Tags == "Yes"), ]
     
     #plot with tags 
     plot <- plot +
-            geom_label_repel(data = subset(data, Tags == "Yes"),  
+            geom_label_repel(data = dataToPlot_Tags,  
                              aes(x = !!log2fc_var, y = !!pValue_var, label = geneNames_gT), 
                              min.segment.length = 0, size = 2, alpha = 0.5, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = 20) +
-            geom_label_repel(data =  subset(data, Tags == "Yes"), 
+            geom_label_repel(data =  dataToPlot_Tags, 
                              aes(x = !!log2fc_var, y = !!pValue_var, label = geneNames_gT), 
                              min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = 20) 
   }

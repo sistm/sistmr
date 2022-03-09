@@ -27,7 +27,7 @@ upper and lower limits of the confidence interval for the average difference.}
 points outside the confidence interval for the upper and lower limits. Default is TRUE.}
 }
 \value{
-
+a \code{ggplot2} object
 }
 \description{
 Bland-Altman plot function

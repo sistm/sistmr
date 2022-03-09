@@ -4,7 +4,7 @@
 #' @param x_var corresponding to the x coordinates for the plot.
 #' @param y_var corresponding to the y coordinates for the plot.
 #' 
-#' @return 
+#' @return a \code{ggplot2} object
 #' @import ggbeeswarm 
 #' @import ggplot2
 #' @export

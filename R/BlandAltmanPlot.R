@@ -9,7 +9,7 @@
 #' @param extremum_pctg a logical indicating if you want to add the percentage of 
 #' points outside the confidence interval for the upper and lower limits. Default is TRUE.
 #' 
-#' @return
+#' @return a \code{ggplot2} object
 #' @import BlandAltmanLeh
 #' @import ggplot2
 #' @export
@@ -32,7 +32,7 @@ BlandAltmanPlot <- function(var1, var2, with_gradient = FALSE, line_color = c("b
   data_plot <- cbind.data.frame(means = ba.stats$means, diffs = ba.stats$diffs)
   
   #Initial plot
-  plot <- ggplot(data_plot, aes(x = means, y = diffs)) + 
+  plot <- ggplot(data_plot, aes_string(x = "means", y = "diffs")) + 
           theme_classic()
   
   #To add percentages of dots outside the limits (upper/lower)

@@ -12,8 +12,12 @@ LazyData: true
 RoxygenNote: 7.1.2
 biocViews:
 Imports:
+  BlandAltmanLeh,
   dplyr,
   ggbeeswarm,
   ggplot2,
   ggrepel,
-  rlang
+  reshape2,
+  rlang,
+  scales, 
+  stats

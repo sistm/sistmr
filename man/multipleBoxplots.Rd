@@ -14,12 +14,8 @@ multipleBoxplots(data, x_var, y_var)
 \item{y_var}{corresponding to the y coordinates for the plot.}
 }
 \value{
-
+a \code{ggplot2} object
 }
 \description{
 Multiple boxplots for many times
-}
-\examples{
-data <- read.table("C:/Users/mh8/Downloads/data_pkg.txt")
-multipleBoxplots( data = data, x_var = time, y_var = TNFRSF9)
 }

@@ -1,8 +1,9 @@
-#' Title
+#' Functions 
 #'
-#' @param vec 
+#' @param vec a \code{vector} 
 #'
-#' @return
+#' @return a \code{vector}
+#' @importFrom stats sd
 #' @export
 #'
 #' @examples

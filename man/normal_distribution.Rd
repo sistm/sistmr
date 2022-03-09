@@ -2,16 +2,16 @@
 % Please edit documentation in R/normalize.R
 \name{normal_distribution}
 \alias{normal_distribution}
-\title{Title}
+\title{Functions}
 \usage{
 normal_distribution(vec)
 }
 \arguments{
-\item{vec}{}
+\item{vec}{a \code{vector}}
 }
 \value{
-
+a \code{vector}
 }
 \description{
-Title
+Functions
 }
