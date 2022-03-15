@@ -6,60 +6,42 @@
 [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
 <!-- badges: end -->
 
-`sistmr` est un package R, hébergé sur Github, contenant des fonctions
-communes aux membres de l’équipe
-[SISTM](bph.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/).
+`sistmr` is an R package, hosted on GitHub, containing functions common to the members of the [SISTM](bph.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/) members.
 
-# Philosophie
+# Philosophy
 
-Ce package contient des fonctions utilisées par un ou plusieurs membres
-de l’équipe. Il permet de rassembler dans un même dépôt des codes R
-utiles à différents membres de l’équipe et d’héberger la dernière
-version de ces codes.
+This package contains functions used by one or more team members. It makes it possible to gather in the same repository R codes useful to different members of the team and to host the latest version of these codes.
 
-# En pratique
+# In practice
 
-## Github
+## GitHub
 
-Pour pouvoir contribuer, il faut:
+To be able to contribute, you must:
 
--   se créer un compte sur [Github](https://github.com/)
+- create an account on [GitHub](https://github.com/)
 
--   demander de faire partie de l’“organisation” SISTM :
-    <https://github.com/sistm>
+- ask to be part of the SISTM "organization" : https://github.com/sistm
 
--   cloner le dépôt git <https://github.com/sistm/sistmr> (par exemple,
-    depuis Rstudio : New project &gt; Version control &gt; Git,
-    renseigner l’adresse du dépôt dans “Repository URL” puis “Create
-    project”).
+- clone git repository https://github.com/sistm/sistmr (for example, from Rstudio : New project > Version control > Git, advise the deposit address in "Repository URL" then "Create project").
 
-Pour plus d’informations sur l’utilisation de Git et Github, voir le
-chapitre 2 de
-[https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/controle-de-version-avec-git-et-github-hitorique-de-changement.html).
+For more information on using Git and GitHub, see Chapter 2 of [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/controle-de-version-avec-git-et-github-hitorique-de-changement.html).
 
-## Code R
+## R code 
 
-Une fois l’accès configuré, l’essentiel des contributions se passe dans
-le dossier `R/`. La marche à suivre et les recommandations sont les
-suivantes :
+Once the access is configured, most of the contributions are in the `R/` folder. The procedure and recommendations are as follows: 
 
--   LA REGLE : une fonction = un fichier `*.R` !!!
+- THE RULE : one function = one `*.R` file !!!
 
--   ajouter un fichier R contenant le code R de la fonction
+- add an R file containing the R code of the function
 
--   documenter la fonction à l’aide des tags `roxygen` (pour plus de
-    détails sur la documentation `roxygen`, voir la section 1.3 de
-    [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)),
-    puis générer la documentation (Rstudio: onglet Build &gt; More &gt;
-    Document, ou exécuter `devtools::document()`)
+- document the function using `roxygen` tags (for more details on the `roxygen` documentation, see section 1.3 of [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)), then generate the documentation (Rstudio : Build tab > More > Document, or run `devtools::document()`).
 
-## Prise en compte des modifs et synchronisation
+## Consideration of changes and synchronization
 
-Le travail est fait en local, il faut maintenant le synchroniser avec le
-serveur :
+The work is done locally, it must now be synchronized with the server :
 
--   faire un “commit”, en explicitant au maximum ce que vous avez fait
+- do a "commit", explaining as much as possible what you have done
 
--   faire un “push” pour uploader vos modifications vers github.
+- do a "push" to upload your modifications to GitHub.
 
-Merci de votre contribution à `sistmr` :-)
+Thank you for your contribution to `sistmr` :-)

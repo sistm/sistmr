@@ -17,7 +17,6 @@ Imports:
   ggbeeswarm,
   ggplot2,
   ggrepel,
-  reshape2,
   rlang,
   scales, 
   stats
