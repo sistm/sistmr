@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
 <!-- badges: end -->
 
-`sistmr` is an R package, hosted on GitHub, containing functions common to the members of the [SISTM](bph.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/) members.
+`sistmr` is an R package, hosted on GitHub, containing functions common to the members of the [SISTM](bordeaux-population-health.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/) members.
 
 # Philosophy
 
