@@ -32,3 +32,24 @@ a \code{ggplot2} object
 \description{
 Bland-Altman plot function
 }
+\examples{
+ 
+library(ggplot2)
+
+#Small sample
+#Generate data
+x <- rnorm(30)
+y <- rnorm(30, mean = 5, sd = 3)
+#Plotting
+BlandAltmanPlot(var1 = x, var2 = y) 
+#Add color by group 
+gr  <- c(rep("G1", 15), rep("G2", 15))
+BlandAltmanPlot(var1 = x, var2 = y) + geom_point(aes(color = gr))
+
+#High sample
+#Generate data
+x <- rnorm(10000)
+y <- rnorm(10000, mean = 5, sd = 3)
+#Plotting with gradient
+BlandAltmanPlot(var1 = x, var2 = y, with_gradient = TRUE)
+}

@@ -43,3 +43,13 @@ a \code{ggplot2} object
 \description{
 Volcano plot function
 }
+\examples{
+genes <- paste0("G", 1:500)
+pval <- runif(500, max = 0.5)
+log2FC <- runif(500, min = -4, max = 4)
+
+data <- cbind.data.frame(genes, pval, log2FC)
+
+rm(genes, pval, log2FC)
+volcanoPlot(log2FC, pval, data, geneNames = genes)
+}

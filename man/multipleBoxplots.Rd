@@ -9,7 +9,7 @@ multipleBoxplots(data, x_var, y_var)
 \arguments{
 \item{data}{a dataset from which the variable \code{x_var} and \code{y_var} should be taken.}
 
-\item{x_var}{corresponding to the x coordinates for the plot.}
+\item{x_var}{corresponding to the x coordinates for the plot, it can be a factor to obtain multiple boxplots.}
 
 \item{y_var}{corresponding to the y coordinates for the plot.}
 }
@@ -18,4 +18,20 @@ a \code{ggplot2} object
 }
 \description{
 Multiple boxplots for many times
+}
+\examples{
+library(ggplot2)
+
+#Generate data
+x_ex <- factor(c(rep("J0", 10), rep("J7", 10), rep("J14", 10)), levels = c("J0", "J7", "J14"))
+y_ex <- rnorm(30)
+
+data_ex <- cbind.data.frame(x_ex, y_ex)
+
+#Plotting
+multipleBoxplots(data = data_ex, x_var = x_ex, y_var = y_ex)
+
+multipleBoxplots(data = data_ex, x_var = x_ex, y_var = y_ex) + 
+labs(x = "Time", y = "Value") + 
+theme(legend.position = "none")
 }

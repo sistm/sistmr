@@ -19,6 +19,16 @@
 #' @import rlang
 #' @importFrom scales trans_new
 #' @export
+#' 
+#' @examples 
+#' genes <- paste0("G", 1:500)
+#' pval <- runif(500, max = 0.5)
+#' log2FC <- runif(500, min = -4, max = 4)
+#' 
+#' data <- cbind.data.frame(genes, pval, log2FC)
+#' 
+#' rm(genes, pval, log2FC)
+#' volcanoPlot(log2FC, pval, data, geneNames = genes)
 
 volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshold = log2(1.5), 
                         color = c("red", "black"), geneNames = NULL, nb_geneTags = 20, logTransformPVal = TRUE){
