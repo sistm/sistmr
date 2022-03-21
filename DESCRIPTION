@@ -8,7 +8,6 @@ Description: Functions common to members of the SISTM team.
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.2
-biocViews:
 Imports:
   BlandAltmanLeh,
   dplyr,
