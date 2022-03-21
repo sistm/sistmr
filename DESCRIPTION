@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Boris Hejblum [aut], Mélanie Huchon [aut, cre]
 Maintainer: Mélanie Huchon <melanie.huchon@u-bordeaux.fr>
 Description: Functions common to members of the SISTM team.
-License: GPL-3 + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.2
 biocViews:
