@@ -6,11 +6,17 @@
 [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
 <!-- badges: end -->
 
-`sistmr` is an R package, hosted on GitHub, containing functions common to the members of the [SISTM](bordeaux-population-health.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/) members.
+`sistmr` is an R package, hosted on GitHub, containing functions common
+to the members of the
+[SISTM](https://www.bordeaux-population-health.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/)
+members.
 
 # Philosophy
 
-This package contains functions used by one or more team members. It makes it possible to gather in the same repository R codes useful to different members of the team and to host the latest version of these codes.
+This package contains functions used by one or more team members. It
+makes it possible to gather in the same repository R codes useful to
+different members of the team and to host the latest version of these
+codes.
 
 # In practice
 
@@ -18,30 +24,39 @@ This package contains functions used by one or more team members. It makes it po
 
 To be able to contribute, you must:
 
-- create an account on [GitHub](https://github.com/)
+-   create an account on [GitHub](https://github.com/)
 
-- ask to be part of the SISTM "organization" : https://github.com/sistm
+-   ask to be part of the SISTM “organization” :
+    <https://github.com/sistm>
 
-- clone git repository https://github.com/sistm/sistmr (for example, from Rstudio : New project > Version control > Git, advise the deposit address in "Repository URL" then "Create project").
+-   clone git repository <https://github.com/sistm/sistmr> (for example,
+    from Rstudio : New project > Version control > Git, advise the
+    deposit address in “Repository URL” then “Create project”).
 
-For more information on using Git and GitHub, see Chapter 2 of [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/controle-de-version-avec-git-et-github-hitorique-de-changement.html).
+For more information on using Git and GitHub, see Chapter 2 of
+[https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/controle-de-version-avec-git-et-github-hitorique-de-changement.html).
 
-## R code 
+## R code
 
-Once the access is configured, most of the contributions are in the `R/` folder. The procedure and recommendations are as follows: 
+Once the access is configured, most of the contributions are in the `R/`
+folder. The procedure and recommendations are as follows:
 
-- THE RULE : one function = one `*.R` file !!!
+-   THE RULE : one function = one `*.R` file !!!
 
-- add an R file containing the R code of the function
+-   add an R file containing the R code of the function
 
-- document the function using `roxygen` tags (for more details on the `roxygen` documentation, see section 1.3 of [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)), then generate the documentation (Rstudio : Build tab > More > Document, or run `devtools::document()`).
+-   document the function using `roxygen` tags (for more details on the
+    `roxygen` documentation, see section 1.3 of
+    [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)),
+    then generate the documentation (Rstudio : Build tab > More >
+    Document, or run `devtools::document()`).
 
 ## Consideration of changes and synchronization
 
 The work is done locally, it must now be synchronized with the server :
 
-- do a "commit", explaining as much as possible what you have done
+-   do a “commit”, explaining as much as possible what you have done
 
-- do a "push" to upload your modifications to GitHub.
+-   do a “push” to upload your modifications to GitHub.
 
 Thank you for your contribution to `sistmr` :-)
