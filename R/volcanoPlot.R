@@ -83,7 +83,6 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   
   #To obtain the "nb_geneTags" first significant genes and put tags on plot
   if(!is.null(geneNames_val)){
-    # browser()
     #To obtain the "nb_geneTags" first significant genes 
     geneTags <- data
     geneTags <- geneTags[which(pValue_val < FDR_threshold),]

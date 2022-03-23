@@ -4,14 +4,16 @@
 \alias{multipleBoxplots}
 \title{Multiple boxplots for many times}
 \usage{
-multipleBoxplots(data, x_var, y_var)
+multipleBoxplots(data, x_var, y_var, add_points = TRUE)
 }
 \arguments{
 \item{data}{a dataset from which the variable \code{x_var} and \code{y_var} should be taken.}
 
-\item{x_var}{corresponding to the x coordinates for the plot, it can be a factor to obtain multiple boxplots.}
+\item{x_var}{corresponding to the x coordinates for the plot, it must be a factor to obtain multiple boxplots.}
 
 \item{y_var}{corresponding to the y coordinates for the plot.}
+
+\item{add_points}{if you want to add points on boxplots. Default value is \code{TRUE}.}
 }
 \value{
 a \code{ggplot2} object
