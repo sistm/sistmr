@@ -7,13 +7,15 @@ Maintainer: Mélanie Huchon <melanie.huchon@u-bordeaux.fr>
 Description: Functions common to members of the SISTM team.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Imports:
   BlandAltmanLeh,
   dplyr,
   ggbeeswarm,
   ggplot2,
+  graphics,
   ggrepel,
+  lme4,
   rlang,
   scales, 
   stats
