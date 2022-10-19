@@ -9,7 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # sistmr
 
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/sistmr)](https://CRAN.R-project.org/package=sistmr)
+[![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
 <!-- badges: end -->
  
 `sistmr` is an R package, hosted on GitHub, containing functions common to the members of the [SISTM](https://www.bordeaux-population-health.center/les-equipes/statistiques-pour-la-medecine-translationnelle-sistm/) members.

@@ -1,7 +1,7 @@
 #' Volcano plot function 
 #'
-#' @param log2fc a magnitude of change (fold-change) in base log 2 corresponding to the x-axis.
-#' @param pValue a statistical significance (p-value) corresponding to the y-axis.
+#' @param log2fc a variable of the magnitude of change (fold-change) in base log 2 corresponding to the x-axis.
+#' @param pValue a variable of statistical significance (p-value) corresponding to the y-axis.
 #' @param data a data.frame of differentially expressed results from which the 
 #' variable \code{log2fc}, \code{pValue} and \code{geneNames} (if it is used) should be taken. 
 #' @param FDR_threshold a threshold of false discovery rate.
@@ -9,7 +9,7 @@
 #' @param color a vector of two colors for significant or not significant points.
 #' @param geneNames a vector of gene names if you want to put gene tags on the volcano plot. Default is NULL.
 #' @param nb_geneTags number of tags for the significant genes if \code{geneNames} 
-#' is not NULL. Default is 20 to obtain the 20 first significant genes.
+#' is not NULL. Default is 20 to obtain the tags of the 20 first significant genes.
 #' @param logTransformPVal If TRUE, the p-values will have a negative logarithm transformation (base 10). Default is TRUE.
 #'
 #' @return a \code{ggplot2} object 
@@ -83,29 +83,28 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   
   #To obtain the "nb_geneTags" first significant genes and put tags on plot
   if(!is.null(geneNames_val)){
-    # browser()
     #To obtain the "nb_geneTags" first significant genes 
     geneTags <- data
     geneTags <- geneTags[which(pValue_val < FDR_threshold),]
     log2fc_gT <- rlang::eval_tidy(log2fc_var, geneTags)
     geneTags <- geneTags[order(abs(log2fc_gT), decreasing = TRUE),]
     geneTags <- geneTags[1:nb_geneTags, ]
-    geneNames_gT <- rlang::eval_tidy(geneNames_var, geneTags)
-    
+
     #To add a tags for the significant gene on plot
     data[, "Tags"] <- "No"
-    data[which(geneNames_val %in% geneNames_gT), "Tags"] <- "Yes"
+    data[which(geneNames_val %in% geneTags$genes_SYMBOL), "Tags"] <- "Yes"
     
     dataToPlot_Tags <- data[which(data$Tags == "Yes"), ]
     
     #plot with tags 
     plot <- plot +
             geom_label_repel(data = dataToPlot_Tags,  
-                             aes(x = !!log2fc_var, y = !!pValue_var, label = geneNames_gT), 
-                             min.segment.length = 0, size = 2, alpha = 0.5, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = 20) +
+                             aes(x = !!log2fc_var, y = !!pValue_var, label = !!geneNames_var), 
+                             min.segment.length = 0, size = 2, alpha = 0.5, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = Inf) +
             geom_label_repel(data =  dataToPlot_Tags, 
-                             aes(x = !!log2fc_var, y = !!pValue_var, label = geneNames_gT), 
-                             min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = 20) 
+                             aes(x = !!log2fc_var, y = !!pValue_var, label = !!geneNames_var), 
+                             min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = Inf) 
+    print(suppressWarnings(plot))
   }
   
   if(logTransformPVal){

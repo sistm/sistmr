@@ -3,6 +3,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/sistmr)](https://CRAN.R-project.org/package=sistmr)
 [![R-CMD-check](https://github.com/sistm/sistmr/workflows/R-CMD-check/badge.svg)](https://github.com/sistm/sistmr/actions)
 <!-- badges: end -->
 
@@ -30,7 +32,7 @@ To be able to contribute, you must:
     <https://github.com/sistm>
 
 -   clone git repository <https://github.com/sistm/sistmr> (for example,
-    from Rstudio : New project > Version control > Git, advise the
+    from Rstudio : New project &gt; Version control &gt; Git, advise the
     deposit address in “Repository URL” then “Create project”).
 
 For more information on using Git and GitHub, see Chapter 2 of
@@ -48,7 +50,7 @@ folder. The procedure and recommendations are as follows:
 -   document the function using `roxygen` tags (for more details on the
     `roxygen` documentation, see section 1.3 of
     [https://r-dev-perf.borishejblum.science](https://r-dev-perf.borishejblum.science/construire-un-package-r.html#documenter-une-fonction)),
-    then generate the documentation (Rstudio : Build tab > More >
+    then generate the documentation (Rstudio : Build tab &gt; More &gt;
     Document, or run `devtools::document()`).
 
 ## Consideration of changes and synchronization
