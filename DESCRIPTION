@@ -10,12 +10,15 @@ Encoding: UTF-8
 RoxygenNote: 7.2.1
 Imports:
   BlandAltmanLeh,
+  dendextend,
   dplyr,
   ggbeeswarm,
   ggplot2,
-  graphics,
   ggrepel,
+  graphics,
+  grDevices,
   lme4,
   rlang,
   scales, 
-  stats
+  stats, 
+  viridis
