@@ -1,6 +1,6 @@
 Package: sistmr
 Type: Package
-Title: A Collection of Utility Function from the Inserm/Inria SISTM Team
+Title: A Collection of Utility Functions from the Inserm/Inria SISTM Team
 Version: 0.1.1
 Author: Boris Hejblum [aut], Mélanie Huchon [aut, cre]
 Maintainer: Mélanie Huchon <melanie.huchon@u-bordeaux.fr>
