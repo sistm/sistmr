@@ -13,7 +13,6 @@
 #' @importFrom graphics plot.new
 #' @importFrom grDevices recordPlot
 #' @importFrom stats as.dendrogram order.dendrogram
-#' @import viridis
 #' 
 #' @author Mélanie Huchon
 #' 
