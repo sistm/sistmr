@@ -20,5 +20,4 @@ Imports:
   lme4,
   rlang,
   scales, 
-  stats, 
-  viridis
+  stats

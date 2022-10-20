@@ -22,14 +22,12 @@ a dendrogram
 Assign colors to the labels of a \code{hclust} dendrogram according to a factor
 }
 \examples{
-library(viridis)
-
 #Load data example
 data(iris)
 #Run hclust on this data
 hc <- hclust(dist(iris[, -5]))
 #Color vector 
-color <- viridis(length(unique(iris[,5])))
+color <- c("#440154FF", "#21908CFF", "#FDE725FF")
 #Use function to color labels
 colorDendro(hc, labels = iris[,5], lab.col = color, main = "Dendrogram of Iris data")
 }

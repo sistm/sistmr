@@ -20,14 +20,12 @@
 #' @export
 #'
 #' @examples
-#' library(viridis)
-#' 
 #' #Load data example
 #' data(iris)
 #' #Run hclust on this data
 #' hc <- hclust(dist(iris[, -5]))
 #' #Color vector 
-#' color <- viridis(length(unique(iris[,5])))
+#' color <- c("#440154FF", "#21908CFF", "#FDE725FF")
 #' #Use function to color labels
 #' colorDendro(hc, labels = iris[,5], lab.col = color, main = "Dendrogram of Iris data")
 
@@ -69,11 +67,6 @@ colorDendro <- function(hclust, labels = hclust$labels, lab.col = NULL, ...){
   #Apply color on dendrogram
   labels_colors(hc) <- colors_to_use
 
-  
   # Plotting dendrogram
   plot(hc, ...)
-  my_plot <- recordPlot()
-  plot.new()
-  
-  return(my_plot)
 }
