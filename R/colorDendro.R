@@ -40,7 +40,7 @@ colorDendro <- function(hclust, labels = hclust$labels, lab.col = NULL, ...){
     stop("Labels don't found in *hclust* object, please specify a character vector of labels.")
     q("no", status = 1, runLast = FALSE)
   }
-  if(is.null(hclust$labels)){
+  if(is.null(hclust$labels) | !identical(hclust$labels, labels)){
     hclust$labels <- labels
   }
   #on length of color and label vectors
@@ -52,7 +52,7 @@ colorDendro <- function(hclust, labels = hclust$labels, lab.col = NULL, ...){
   }
   
   #Association between labels and colors
-  tab_labelCol <- data.frame(labels = labels)
+  tab_labelCol <- data.frame(labels = factor(labels))
   for(i in 1:length(unique(labels))){
     tab_labelCol[tab_labelCol$labels == levels(tab_labelCol$labels)[i], "color"] <- unique(lab.col)[i]
   }
