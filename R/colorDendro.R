@@ -52,7 +52,7 @@ colorDendro <- function(hclust, labels = hclust$labels, lab.col = NULL, ...){
   }
   
   #Association between labels and colors
-  tab_labelCol <- data.frame(labels = labels)
+  tab_labelCol <- data.frame(labels = factor(labels))
   for(i in 1:length(unique(labels))){
     tab_labelCol[tab_labelCol$labels == levels(tab_labelCol$labels)[i], "color"] <- unique(lab.col)[i]
   }
