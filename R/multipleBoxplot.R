@@ -4,6 +4,7 @@
 #' @param x_var corresponding to the x coordinates for the plot, it must be a factor to obtain multiple boxplots.
 #' @param y_var corresponding to the y coordinates for the plot.
 #' @param add_points if you want to add points on boxplots. Default value is \code{TRUE}. 
+#' @param color if you want to select a color palette from ColorBrewer. Defaut value is \code{RdGy}
 #'
 #' @return a \code{ggplot2} object
 #' @import ggbeeswarm
@@ -27,10 +28,11 @@
 #' labs(x = "Time", y = "Value") + 
 #' theme(legend.position = "none")
 
-multipleBoxplots <- function(data, x_var, y_var, add_points = TRUE){
+multipleBoxplots <- function(data, x_var, y_var, add_points = TRUE,color = "RdGy",fill = TRUE,shape_chosen = "circle open"){
 
   #Before to call a tidy evaluation function (ggplot) inside of another function
   # use enquo() and !! before object of the function
+  #browser()
   x_var <- enquo(x_var)
   y_var <- enquo(y_var)
   
@@ -43,19 +45,26 @@ multipleBoxplots <- function(data, x_var, y_var, add_points = TRUE){
   nb_factors <- length(levels(x_val))
   
   #Initial plot 
-  plot <- ggplot(data) +
+  plot <- ggplot(data)
           #To add boxplots
-          geom_boxplot(aes(y = !!y_var, x = !!x_var, color = !!x_var, fill = !!x_var), outlier.shape = NA, width = 0.4, lwd = 0.6) + 
-          #To see points and don't have background color in boxplots
-          scale_fill_manual(values = rep("transparent", nb_factors)) + 
-          #To don't have background color in legend
-          guides(fill = "none") +
-          #To change background plot
-          theme_classic()
+    if(fill){
+      cat("Fill boxplot")
+      plot <- plot + geom_boxplot(aes(y = !!y_var, x = !!x_var, color = !!x_var, fill = !!x_var) , outlier.shape = NA, width = 0.4, lwd = 0.6)#+
+        #scale_fill_manual(values = rep("transparent", nb_factors))
+    }else{
+      cat("No Fill boxplot")
+      plot <- plot + geom_boxplot(aes(y = !!y_var, x = !!x_var, color = !!x_var) , outlier.shape = NA, width = 0.4, lwd = 0.6)
+    }
+    plot <- plot + 
+           scale_color_brewer(palette = color) +
+          # #To don't have background color in legend
+           guides(fill = "none") +
+          # #To change background plot
+           theme_classic()
   
   if(add_points){
     #To add points on graph
-    plot <- plot + geom_quasirandom(aes(y = !!y_var, x = !!x_var, color = !!x_var), size = 1, alpha = 0.5) 
+    plot <- plot + geom_quasirandom(aes(y = !!y_var, x = !!x_var, color = !!x_var), size = 1, alpha = 0.5,shape = shape_chosen) 
   }
 
   return(plot)
