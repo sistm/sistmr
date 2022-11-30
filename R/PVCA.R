@@ -46,7 +46,7 @@ PVCA <- function(expression, sample_info, Sample_ID, effects,
   }
   
   if(any(colSums(is.na(sample_info[, effects])) > 0)){
-    stop("missing values in column ", names(which(colSums(is.na(sample_info[, effects]))>0)), " from `sample_info`")
+    warning("missing values in column ", names(which(colSums(is.na(sample_info[, effects]))>0)), " from `sample_info`")
   }
   
   theDataMatrix <- expression[,order(as.character(colnames(expression)))]
