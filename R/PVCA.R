@@ -30,7 +30,7 @@ PVCA <- function(expression, sample_info, Sample_ID, effects,
   
   ########## Load data ##########
   
-  if(!is.data.frame(sample_info)){
+  if(!is.data.frame(sample_info) | is.tbl(sample_info)){
     sample_info <- as.data.frame(sample_info)
   }
   
