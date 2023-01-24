@@ -104,7 +104,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
             geom_label_repel(data =  dataToPlot_Tags, 
                              aes(x = !!log2fc_var, y = !!pValue_var, label = !!geneNames_var), 
                              min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = Inf) 
-    print(suppressWarnings(plot))
+
   }
   
   if(logTransformPVal){
