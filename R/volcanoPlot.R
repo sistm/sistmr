@@ -59,20 +59,21 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
   data$significant[pValue_val > FDR_threshold | abs(log2fc_val) < LFC_threshold] <- "Not significant"
   data$significant <- factor(data$significant, 
                              levels = c("Significant", "Not significant"),
-                             ordered= TRUE)
+                             ordered = TRUE)
   
   # Initial plot
   plot <- ggplot(data = data, aes(x = !!log2fc_var, y = !!pValue_var)) +
           #To add points
           geom_point(data = data, aes_string(color = "significant", fill = "significant"), alpha = 0.5) +
           #To add vertical and horizontal threshold lines
-          geom_vline(xintercept = LFC_threshold, lty = 2, colour="black") +
-          geom_vline(xintercept = -LFC_threshold, lty = 2, colour="black") +
-          geom_hline(yintercept = FDR_threshold, lty = 2, colour="black") +
+          geom_vline(xintercept = LFC_threshold, lty = 2, colour = "black") +
+          geom_vline(xintercept = -LFC_threshold, lty = 2, colour = "black") +
+          geom_hline(yintercept = FDR_threshold, lty = 2, colour = "black") +
           #To put the coordinates of the abscissa in log2
-          scale_x_continuous(breaks=log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)), 
+          scale_x_continuous(breaks = log2(c(1/50, 1/15, 1/5, 1/1.5, 1.5, 5, 15, 50)), 
                              minor_breaks = NULL,
-                             limits = c(-7,7), labels = c("1/50", "1/15", "1/5", "1/1.5", "1.5", "5", "15", "50")) + 
+                             limits = c(-round(max(abs(log2fc_val))), round(max(abs(log2fc_val)))), 
+                             labels = c("1/50", "1/15", "1/5", "1/1.5", "1.5", "5", "15", "50")) + 
           #To put the log2 scale in the x-axis label
           xlab(paste0(as_name(log2fc_var), " (log2 scale)")) +
           #To put the chosen color and name = "" to remove the title of legend
@@ -86,13 +87,13 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
     #To obtain the "nb_geneTags" first significant genes 
     geneTags <- data
     geneTags <- geneTags[which(pValue_val < FDR_threshold),]
-    log2fc_gT <- rlang::eval_tidy(log2fc_var, geneTags)
+    log2fc_gT <- eval_tidy(log2fc_var, geneTags)
     geneTags <- geneTags[order(abs(log2fc_gT), decreasing = TRUE),]
     geneTags <- geneTags[1:nb_geneTags, ]
 
     #To add a tags for the significant gene on plot
     data[, "Tags"] <- "No"
-    data[which(geneNames_val %in% geneTags$genes_SYMBOL), "Tags"] <- "Yes"
+    data[which(geneTags$significant == "Significant"), "Tags"] <- "Yes"
     
     dataToPlot_Tags <- data[which(data$Tags == "Yes"), ]
     
@@ -104,7 +105,6 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
             geom_label_repel(data =  dataToPlot_Tags, 
                              aes(x = !!log2fc_var, y = !!pValue_var, label = !!geneNames_var), 
                              min.segment.length = 0, size = 2, fill = NA, seed = 1234, show.legend = FALSE, force = 6, max.overlaps = Inf) 
-
   }
   
   if(logTransformPVal){
@@ -116,13 +116,13 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
                                       domain = c(0, Inf))
     #To add this transformation on plot
     plot <- plot +
-            ylab("FDR p-value (-log10 scale)") +
-            scale_y_continuous(trans = trans_mlog10,
-                               breaks = c(1,0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005),
-                               minor_breaks = c(2:9/10, 2:9/100, 2:9/1000, 2:9/10000), 
-                               labels = c(expression("1x10"^{0}), expression("5x10"^{-1}), expression("1x10"^{-1}), 
-                                          expression("5x10"^{-2}), expression("1x10"^{-2}), expression("5x10"^{-3}),
-                                          expression("1x10"^{-3}), expression("5x10"^{-4}))) 
+              ylab("FDR p-value (-log10 scale)") +
+              scale_y_continuous(trans = trans_mlog10,
+                                 breaks = c(1,0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005),
+                                 minor_breaks = c(2:9/10, 2:9/100, 2:9/1000, 2:9/10000), 
+                                 labels = c(expression("1x10"^{0}), expression("5x10"^{-1}), expression("1x10"^{-1}), 
+                                            expression("5x10"^{-2}), expression("1x10"^{-2}), expression("5x10"^{-3}),
+                                            expression("1x10"^{-3}), expression("5x10"^{-4}))) 
   } else {
     plot <- plot +
             ylab("FDR p-value") 

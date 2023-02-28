@@ -1,13 +1,13 @@
 Package: sistmr
 Type: Package
 Title: A Collection of Utility Functions from the Inserm/Inria SISTM Team
-Version: 0.1.1
+Version: 0.1.2
 Author: Boris Hejblum [aut], Mélanie Huchon [aut, cre]
 Maintainer: Mélanie Huchon <melanie.huchon@u-bordeaux.fr>
 Description: Functions common to members of the SISTM team.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Imports:
   BlandAltmanLeh,
   dendextend,
