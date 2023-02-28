@@ -93,7 +93,7 @@ volcanoPlot <- function(log2fc, pValue, data, FDR_threshold = 0.05, LFC_threshol
 
     #To add a tags for the significant gene on plot
     data[, "Tags"] <- "No"
-    data[which(geneTags$significant == "Significant"), "Tags"] <- "Yes"
+    data[which(data$significant == "Significant"), "Tags"] <- "Yes"
     
     dataToPlot_Tags <- data[which(data$Tags == "Yes"), ]
     
