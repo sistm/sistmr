@@ -4,11 +4,13 @@
 #' @param MARGIN "row" or "col" to identify the place of sample (library size). If the \code{raw_counts} matrix has a \code{nxG} size, put "row" if it's opposite put "col".
 #' @param log2 a logical indicating whether the normalized counts will be transformed in log2. Default is \code{TRUE}.
 #' @param plot a logical indicating whether a graph will be displayed for the normalization check. Default is \code{TRUE}.
+#' @param TMM_method a logical indicating whether the library size will be normalized by TMM method of \code{edgeR} package. Default is \code{FALSE}.
 #'
 #' @return normalized counts matrix 
 #' 
 #' @importFrom utils menu
-#' 
+#' @importFrom edgeR DGEList calcNormFactors
+#'  
 #' @author Mélanie Huchon
 #' 
 #' @export
@@ -24,67 +26,61 @@
 #' #Use the method
 #' norm_data <- counts_normalization(raw_counts = data.frame(raw_data), MARGIN = "row")
 
-counts_normalization <- function(raw_counts, MARGIN = c("row", "col"), log2 = TRUE, plot = TRUE){
+counts_normalization <- function(raw_counts, MARGIN = c("row", "col"), log2 = TRUE, plot = TRUE, TMM_method = FALSE){
   
-  input = NULL
-
-  # Check if the dimensions and MARGIN condition correspond and ask if the normalisation is on the dimension 
-  if(ncol(raw_counts) < nrow(raw_counts) & identical(MARGIN, "row")){
-    input <- menu(c("Yes", "No"), title = "Are you sure that your samples are in rows? (nb_col < nb_row)") 
-    if(input == 1){
-      norm_counts <- apply(raw_counts, MARGIN = 1, function(v) {
-        (v + 0.5)/(sum(v) + 1) * 10^6
-      })
-    }
+  # Ensure that MARGIN is either "row" or "col"
+  MARGIN <- match.arg(MARGIN) 
+  
+  if (MARGIN == "row" && ncol(raw_counts) < nrow(raw_counts)) {
+    input <- menu(c("Yes", "No"), title = "Are you sure that your samples are in rows? (nb_col < nb_row)")
+    if (input == 2) stop("The normalization has been stopped. Please check your input dimensions.")
   }
   
-  if(ncol(raw_counts) > nrow(raw_counts) & identical(MARGIN, "col")){
-    input <- menu(c("Yes", "No"), title = "Are you sure that your samples are in columns? (nb_col > nb_row)") 
-    if(input == 1){
-      norm_counts <- apply(raw_counts, MARGIN = 2, function(v) {
-        (v + 0.5)/(sum(v) + 1) * 10^6
-      })
-    }
+  if (MARGIN == "col" && ncol(raw_counts) > nrow(raw_counts)) {
+    input <- menu(c("Yes", "No"), title = "Are you sure that your samples are in columns? (nb_col > nb_row)")
+    if (input == 2) stop("The normalization has been stopped. Please check your input dimensions.")
   }
   
-  #If the answer is "No", the script stop.
-  if(identical(input, 2)){
-    opt <- options(show.error.messages=FALSE, browser = FALSE)
-    on.exit(options(opt))
-  #If the conditions are ok, calculate the normalized counts.
-  }else{
-    if(identical(MARGIN, "row")){
-      norm_counts <- apply(raw_counts, MARGIN = 1, function(v) {
-        (v + 0.5)/(sum(v) + 1) * 10^6
-      })
-    }else if(identical(MARGIN, "col")){
-      norm_counts <- apply(raw_counts, MARGIN = 2, function(v) {
-        (v + 0.5)/(sum(v) + 1) * 10^6
-      })
-    }
+  # Transpose if samples are in rows
+  if (MARGIN == "row") {
+    raw_counts <- t(raw_counts)
   }
-  #To transform in log2 
-  if(log2){
-    norm_counts <- log2(norm_counts)
+  
+  # Calculate library sizes (sum of counts for each sample)
+  lib.size <- colSums(raw_counts)
+  
+  # Apply TMM normalization if requested
+  if (TMM_method) {
+    # Create DGEList object and calculate TMM normalization factors
+    dge <- DGEList(counts = raw_counts)
+    dge <- calcNormFactors(dge, method = "TMM")
+    # Adjust library sizes with TMM normalization factors
+    lib.size <- lib.size * dge$samples$norm.factors
   }
-  #To transpose if necessary
-  if(!identical(dim(raw_counts)[1], dim(norm_counts)[1])){
+  # Normalize counts by library size (counts per million)
+  norm_counts <- sweep(raw_counts, 2, lib.size, "/") * 1e6
+  
+  # Transpose back if samples were originally in rows
+  if (MARGIN == "row") {
     norm_counts <- t(norm_counts)
   }
   
-  # To display the graph control
-  if(plot){
-    if(log2){
+  # Apply log2 transformation if requested
+  if (log2) {
+    norm_counts <- log2(norm_counts + 1)
+  }
+  
+  # Plot normalized counts if requested
+  if (plot) {
+    if (log2) {
       norm_counts_plot <- 2^norm_counts
-    }else{
+    } else {
       norm_counts_plot <- norm_counts
     }
-    if(identical(MARGIN, "row")){
-      barplot(rowSums(norm_counts_plot), xlab = "Samples")
-    }else if(identical(MARGIN, "col")){
-      barplot(colSums(norm_counts_plot), xlab = "Samples")
-    }
+    
+    barplot(if (MARGIN == "row") rowSums(norm_counts) else colSums(norm_counts), 
+            xlab = "Samples", main = "Normalized Counts")
   }
-
+  
   return(as.data.frame(norm_counts))
 }
