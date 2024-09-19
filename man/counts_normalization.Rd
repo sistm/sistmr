@@ -8,7 +8,8 @@ counts_normalization(
   raw_counts,
   MARGIN = c("row", "col"),
   log2 = TRUE,
-  plot = TRUE
+  plot = TRUE,
+  TMM_method = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ counts_normalization(
 \item{log2}{a logical indicating whether the normalized counts will be transformed in log2. Default is \code{TRUE}.}
 
 \item{plot}{a logical indicating whether a graph will be displayed for the normalization check. Default is \code{TRUE}.}
+
+\item{TMM_method}{a logical indicating whether the library size will be normalized by TMM method of \code{edgeR} package. Default is \code{FALSE}.}
 }
 \value{
 normalized counts matrix

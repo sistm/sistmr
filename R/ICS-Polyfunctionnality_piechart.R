@@ -42,23 +42,34 @@ Polyfunctionnality_piechart <- function(data_ICS, list_cytokines, ID_name, group
                             pop_type = cellPop_type, gp_cyto = group_cyto)
   
   #Focus on group and time point
+  
   nb_cyto <- data_pie$nb_cytokine[which(data_pie[,Timepoint_var] == Timepoint_value)]
   index <-  order(data_pie$nb_cyto) # To order according to number of cytokines
   
   nb_cyto <- nb_cyto[index]
-  value_cyto <- data_pie[which(data_pie[,Timepoint_var] == Timepoint_value), group_value][index]
-  list_arcs <- NULL
-  for(cyto in list_cytokines){
-    list_arcs[[cyto]] <- data_pie[which(data_pie[,Timepoint_var] == Timepoint_value), cyto][index]
-  }  
-  # condition for the title of pie chart
-  if(is.null(title_piechart)){
-    title_piechart <- title_piechart
-  }else{
-    title_piechart <- title_piechart
+
+  # Extract the values for cytokine activation, handling group_var being NULL
+  if (!is.null(group_var)) {
+    value_cyto <- data_pie[which(data_pie[, Timepoint_var] == Timepoint_value), group_value][index]
+  } else {
+    # If no group_var is provided, aggregate the data for all observations
+    value_cyto <- data_pie[which(data_pie[, Timepoint_var] == Timepoint_value), "All"]
+    value_cyto <- value_cyto[index]
   }
   
-  #create the piechart 
+  # Create a list to store the cytokine arcs
+  list_arcs <- list()
+  
+  for (cyto in list_cytokines) {
+    list_arcs[[cyto]] <- data_pie[which(data_pie[, Timepoint_var] == Timepoint_value), cyto][index]
+  }
+  
+  # Title of the pie chart (use default if not provided)
+  if (is.null(title_piechart)) {
+    title_piechart <- paste("Piechart for Timepoint", Timepoint_value, "and Stim", Stim_value)
+  }
+  
+  # Create the pie chart using the draw_pie_arcs function
   piechart <- draw_pie_arcs(value = value_cyto, arcs = list_arcs, group = nb_cyto, title = title_piechart, leg = leg_piechart, size = 1, piecolors = pie_col, ringcolors = ring_col)
   
   return(piechart)

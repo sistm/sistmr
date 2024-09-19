@@ -15,7 +15,6 @@
 #'  
 #' @importFrom grDevices grey.colors rainbow recordPlot
 #' @importFrom graphics pie legend plot.window polygon 
-#' @export
 #' 
 #' @keywords internal
 #' 

@@ -6,7 +6,6 @@
 #' @param recycle 
 #'
 #' @return a \code{matrix} object
-#' @export
 #' 
 #' @keywords internal
 #' 

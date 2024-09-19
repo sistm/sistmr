@@ -49,9 +49,9 @@ The boolean cytokines must have this type of format : IFN-IL2-MIP1b-TNF+ in CD4
 }
 \examples{
 
-d <- dataMngt_piechart(data = ICS_data, list_cyto = c("IFN", "IL2", "MIP1b", "TNF"),
+\dontrun{d <- dataMngt_piechart(data = ICS_data, list_cyto = c("IFN", "IL2", "MIP1b", "TNF"),
 ID = "ID", group = "Arm", group_val = "Arm1", Timepoint = "TP", Timepoint_val = "TP1",
-Stim = "Stim", Stim_val = "BackgroundSubstracted", pop_type = "CD4")
+Stim = "Stim", Stim_val = "BackgroundSubstracted", pop_type = "CD4")}
 }
 \author{
 Mélanie Huchon
